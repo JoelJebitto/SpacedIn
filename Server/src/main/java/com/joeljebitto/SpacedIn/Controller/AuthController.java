@@ -30,7 +30,7 @@ public class AuthController {
   private JwtUtil jwtUtil;
 
   @PostMapping("/signup")
-  public ResponseEntity<String> signup(@RequestBody AuthRequest request) {
+  public ResponseEntity<?> signup(@RequestBody AuthRequest request) {
     if (userRepo.findByUsername(request.username()).isPresent()) {
       return ResponseEntity.status(HttpStatus.CONFLICT).body("Username already exists");
     }
@@ -39,7 +39,8 @@ public class AuthController {
     user.setPassword(encoder.encode(request.password()));
     user.setRole("ROLE_USER");
     userRepo.save(user);
-    return ResponseEntity.ok("User registered successfully");
+    String token = jwtUtil.generateToken(user.getUsername());
+    return ResponseEntity.ok(new AuthResponse(token));
   }
 
   @PostMapping("/login")
