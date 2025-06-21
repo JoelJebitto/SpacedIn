@@ -18,7 +18,7 @@ import com.joeljebitto.SpacedIn.Repository.UserRepository;
 import com.joeljebitto.SpacedIn.Utils.JwtUtil;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/v1/auth")
 public class AuthController {
   @Autowired
   private UserRepository userRepo;

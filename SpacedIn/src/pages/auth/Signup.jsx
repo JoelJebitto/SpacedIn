@@ -11,7 +11,7 @@ function SignUp() {
   const handleSignUp = async (e) => {
     e.preventDefault();
 
-    const res = await fetch("http://localhost:8080/auth/signup", {
+    const res = await fetch("http://localhost:8080/api/v1/auth/signup", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password }),
