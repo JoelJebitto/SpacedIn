@@ -26,7 +26,7 @@ const Header = () => {
   };
 
   return (
-    <div className="bg-gray-900 flex px-5 py-3 text-white lg:w-[60rem] lg:rounded-2xl mx-auto lg:mt-3 mb-3">
+    <div className="bg-black/90 flex px-5 py-3 text-white shadow-2xl lg:w-[60rem] lg:rounded-2xl mx-auto lg:mt-3 mb-3">
       <h1 className="flex-1 text-xl my-auto">SpacedIn</h1>
       <div className="flex">
         {token ? (
