@@ -3,7 +3,7 @@ import useAuthStore from "../store/useAuthStore";
 const Btn = ({ children, onClick }) => {
   return (
     <button
-      className="p-3 transition-all active:bg-gray-800 rounded-xl"
+      className="p-3 transition-all hover:cursor-pointer active:bg-gray-800 rounded-xl"
       onClick={onClick}
     >
       {children}
