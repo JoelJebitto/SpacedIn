@@ -4,3 +4,9 @@
     @apply transition-all duration-300 ease-in-out;
   }
 }
+
+input:-webkit-autofill {
+  box-shadow: 0 0 0 1000px rgba(0, 0, 0, 0.9) inset !important;
+  -webkit-text-fill-color: #f1f5f9 !important; /* light text */
+  transition: background-color 9999s ease-in-out 0s;
+}

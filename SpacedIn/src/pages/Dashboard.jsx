@@ -11,7 +11,7 @@ function Dashboard() {
     !isTokenValid() && navigate("/");
   }, [navigate, isTokenValid]);
   return (
-    <div className="flex flex-col w-screen lg:w-[60rem] m-5 lg:mx-auto">
+    <div className="flex flex-col w-screen lg:w-[55rem] m-5 lg:mx-auto">
       <FullOverview />
       <Decks />
     </div>

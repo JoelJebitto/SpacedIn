@@ -28,24 +28,28 @@ function Login() {
   return (
     <form
       onSubmit={handleLogin}
-      className="mx-auto bg-gray-300 flex flex-col rounded-2xl p-5 w-[90vw] md:w-[30rem] lg:w-[40rem] my-auto mt-[30vh]"
+      className="mx-auto bg-black/90 text-white shadow-2xl flex flex-col rounded-2xl px-5 py-7 w-[90vw] md:w-[30rem] lg:w-[35rem] my-auto mt-[30vh]"
     >
+      <h1 className="text-5xl my-3 font-bold ">Login</h1>
       <input
-        className="py-2 rounded-2xl px-5 my-1 bg-gray-200 outline-none"
+        className="py-3 rounded-2xl px-5 my-2 bg-black/90 outline-none"
         value={username}
         onChange={(e) => setUsername(e.target.value)}
         placeholder="Username"
         required
       />
       <input
-        className="py-2 rounded-2xl px-5 my-1 bg-gray-200 outline-none"
+        className="py-3 rounded-2xl px-5 my-3 bg-black/90 outline-none"
         type="password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         placeholder="Password"
         required
       />
-      <button type="submit" className="py-2 rounded-2xl px-5 my-1 bg-gray-400">
+      <button
+        type="submit"
+        className="py-2 rounded-2xl px-5 mb-1 mt-5 shadow-2xl bg-gray-300/80 text-black hover:bg-gray-300/90 active:bg-gray-300"
+      >
         Login
       </button>
     </form>
