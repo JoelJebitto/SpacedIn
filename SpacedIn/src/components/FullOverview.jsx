@@ -8,7 +8,7 @@ const FullOverview = () => {
       <CircleProgressBar val={90} className="size-72 md:size-80 mx-auto" />
       <div className="p-5 h-full flex flex-col flex-1 mt-5 md:mt-0 md:ml-5">
         <div className="flex flex-col flex-1">
-          <ProgressBar title="Chemistry" val={30} />
+          <ProgressBar title="Chemistry" val={80} />
           <ProgressBar title="English" val={90} />
           <ProgressBar title="Math" val={70} />
           <ProgressBar title="physics" val={20} />
