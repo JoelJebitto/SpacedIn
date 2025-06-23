@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import useAuthStore from "../store/useAuthStore";
 import FullOverview from "../components/FullOverview";
 import Decks from "../components/Decks";
+import AddDeckButton from "../components/AddDeckButton";
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -14,6 +15,7 @@ function Dashboard() {
     <div className="flex flex-col w-screen lg:w-[55rem] m-5 lg:mx-auto">
       <FullOverview />
       <Decks />
+      <AddDeckButton />
     </div>
   );
 }

@@ -25,7 +25,7 @@ const lDeck = [
 
 const Decks = () => {
   return (
-    <div className="mt-7 p-5 bg-black/80 text-white rounded-xl">
+    <div className="mt-7 p-5 bg-black/80 text-white rounded-xl shadow-2xl">
       {/* <h1 className="text-4xl font-bold mb-3 underline">Decks:</h1> */}
       <div className=" flex flex-wrap">
         {lDeck.map((i) => (
