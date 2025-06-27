@@ -10,7 +10,7 @@ export default function LearnButton({ className }) {
         viewBox="0 0 24 24"
         strokeWidth={1.5}
         stroke="currentColor"
-        className="size-6"
+        className="size-6 mx-1"
       >
         <path
           strokeLinecap="round"

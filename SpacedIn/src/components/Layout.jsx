@@ -4,8 +4,10 @@ import { Outlet } from "react-router-dom";
 export default function Layout() {
   return (
     <>
-      <Header />
-      <main className="flex">
+      <div className="bg-white absolute flex w-full left-1/2 transform -translate-x-1/2 ">
+        <Header />
+      </div>
+      <main className="flex mt-25">
         <Outlet />
       </main>
     </>

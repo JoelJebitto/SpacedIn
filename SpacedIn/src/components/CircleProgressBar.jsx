@@ -1,6 +1,6 @@
 export default function CircleProgressBar({ val, className }) {
   return (
-    <div className={"relative " + className}>
+    <div className={"relative z-10 " + className}>
       <svg
         className="size-full -rotate-90"
         viewBox="0 0 36 36"
