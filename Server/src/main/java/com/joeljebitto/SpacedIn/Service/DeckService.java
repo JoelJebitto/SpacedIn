@@ -6,13 +6,13 @@ import com.joeljebitto.SpacedIn.DTO.DeckRequest;
 import com.joeljebitto.SpacedIn.DTO.DeckResponse;
 
 public interface DeckService {
-  DeckResponse createDeck(DeckRequest request);
+  DeckResponse createDeck(DeckRequest request, Long userId);
 
-  DeckResponse getDeckById(Long id);
+  List<DeckResponse> getDecksForUser(Long userId);
 
-  List<DeckResponse> getAllDecks();
+  DeckResponse getDeckById(Long id, Long userId);
 
-  DeckResponse updateDeck(Long id, DeckRequest request);
+  DeckResponse updateDeck(Long id, DeckRequest request, Long userId);
 
-  void deleteDeck(Long id);
+  void deleteDeck(Long id, Long userId);
 }

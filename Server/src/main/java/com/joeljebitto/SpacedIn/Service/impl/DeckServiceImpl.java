@@ -28,9 +28,9 @@ public class DeckServiceImpl implements DeckService {
   }
 
   @Override
-  public DeckResponse createDeck(DeckRequest req) {
-    User user = userRepo.findById(req.getUserId())
-        .orElseThrow(() -> new ResourceNotFoundException("User", "id", req.getUserId()));
+  public DeckResponse createDeck(DeckRequest req, Long userId) {
+    User user = userRepo.findById(userId)
+        .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
     Deck deck = new Deck();
     deck.setTitle(req.getTitle());
     deck.setDescription(req.getDescription());
@@ -43,30 +43,24 @@ public class DeckServiceImpl implements DeckService {
 
   @Override
   @Transactional(readOnly = true)
-  public DeckResponse getDeckById(Long id) {
-    Deck deck = deckRepo.findById(id)
-        .orElseThrow(() -> new ResourceNotFoundException("Deck", "id", id));
-    return toResponse(deck);
-  }
-
-  @Override
-  @Transactional(readOnly = true)
-  public List<DeckResponse> getAllDecks() {
-    return deckRepo.findAll().stream()
+  public List<DeckResponse> getDecksForUser(Long userId) {
+    return deckRepo.findAllByUserId(userId).stream()
         .map(this::toResponse)
         .collect(Collectors.toList());
   }
 
   @Override
-  public DeckResponse updateDeck(Long id, DeckRequest req) {
-    Deck deck = deckRepo.findById(id)
+  @Transactional(readOnly = true)
+  public DeckResponse getDeckById(Long id, Long userId) {
+    Deck deck = deckRepo.findByIdAndUserId(id, userId)
         .orElseThrow(() -> new ResourceNotFoundException("Deck", "id", id));
-    // Optionally update owner:
-    if (!deck.getUser().getId().equals(req.getUserId())) {
-      User newUser = userRepo.findById(req.getUserId())
-          .orElseThrow(() -> new ResourceNotFoundException("User", "id", req.getUserId()));
-      deck.setUser(newUser);
-    }
+    return toResponse(deck);
+  }
+
+  @Override
+  public DeckResponse updateDeck(Long id, DeckRequest req, Long userId) {
+    Deck deck = deckRepo.findByIdAndUserId(id, userId)
+        .orElseThrow(() -> new ResourceNotFoundException("Deck", "id", id));
     deck.setTitle(req.getTitle());
     deck.setDescription(req.getDescription());
     Deck updated = deckRepo.save(deck);
@@ -74,11 +68,10 @@ public class DeckServiceImpl implements DeckService {
   }
 
   @Override
-  public void deleteDeck(Long id) {
-    if (!deckRepo.existsById(id)) {
-      throw new ResourceNotFoundException("Deck", "id", id);
-    }
-    deckRepo.deleteById(id);
+  public void deleteDeck(Long id, Long userId) {
+    Deck deck = deckRepo.findByIdAndUserId(id, userId)
+        .orElseThrow(() -> new ResourceNotFoundException("Deck", "id", id));
+    deckRepo.delete(deck);
   }
 
   private DeckResponse toResponse(Deck deck) {

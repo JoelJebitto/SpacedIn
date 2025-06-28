@@ -1,7 +1,6 @@
 package com.joeljebitto.SpacedIn.DTO;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 
 public class DeckRequest {
   @NotBlank
@@ -9,10 +8,7 @@ public class DeckRequest {
 
   private String description;
 
-  @NotNull
-  private Long userId;
-
-  // getters + setters
+  // getters & setters
   public String getTitle() {
     return title;
   }
@@ -27,13 +23,5 @@ public class DeckRequest {
 
   public void setDescription(String description) {
     this.description = description;
-  }
-
-  public Long getUserId() {
-    return userId;
-  }
-
-  public void setUserId(Long userId) {
-    this.userId = userId;
   }
 }
