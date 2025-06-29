@@ -1,2 +1,2 @@
-1->login page and sign up page
+Completed: login and sign up pages
 

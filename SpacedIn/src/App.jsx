@@ -1,9 +1,9 @@
 
 
+import Router from './routes.jsx'
+
 function App() {
-  return (
-    <div></div>
-  );
+  return <Router />
 }
 
 export default App;
