@@ -1,6 +1,7 @@
 # SpacedIn – Application Requirements
 
 ## 📘 Project Overview
+
 **SpacedIn** is a full-stack spaced repetition application built using **Spring Boot** and **React**, with integrated AI features to enhance personalized learning.
 
 ---
@@ -18,6 +19,7 @@
 ## 🧩 Functional Modules and API Endpoints
 
 ### 1. 🧑 User Module
+
 - `POST /api/auth/register`: Register new user
 - `POST /api/auth/login`: Authenticate user (JWT)
 - `GET /api/users/{id}`: View profile
@@ -26,6 +28,7 @@
 - `DELETE /api/users/{id}`: Delete account
 
 ### 2. 🗂️ Deck Module
+
 - `POST /api/decks`: Create new deck
 - `GET /api/decks/user/{userId}`: List decks by user
 - `PUT /api/decks/{deckId}`: Update deck
@@ -33,6 +36,7 @@
 - `GET /api/decks/share/{deckId}`: Share deck by link
 
 ### 3. 🧠 Flashcard Module
+
 - `POST /api/cards`: Create flashcard
 - `PUT /api/cards/{cardId}`: Update flashcard
 - `DELETE /api/cards/{cardId}`: Delete flashcard
@@ -40,12 +44,14 @@
 - `POST /api/cards/generate`: AI-generated flashcards
 
 ### 4. ⏱️ Spaced Repetition Logic
+
 - `GET /api/deck-progress/{userId}`: Get deck progress
 - `GET /api/card-progress/{userId}/{deckId}`: Get card progress
 - `GET /api/schedule/{userId}`: Fetch review schedule
 - `POST /api/progress`: Update review outcome
 
 ### 5. 🤖 AI Assistant
+
 - `POST /api/ai/explain`: AI explanation for concepts
 - `POST /api/ai/help-card/{cardId}`: AI help on card content
 - `POST /api/ai/translate-card`: Translate flashcard using AI
@@ -53,18 +59,30 @@
 - `GET /api/ai/weak-topics/{userId}`: Identify weak areas
 
 ### 6. 📊 Learning Analytics
+
 - Visualize deck & card progress
 - Track review frequency and retention
 - AI-based feedback on weak concepts
 
 ### 7. 🛡️ Admin Module
+
 - `GET /api/admin/users`: List all users
 - `PATCH /api/admin/ban-user/{userId}`: Ban user
 - `DELETE /api/admin/deck/{deckId}`: Delete deck
 
 ---
 
+### 8. 📈 User Learning Progress Tracking
+
+- Track individual card reviews and intervals
+- Store timestamps and outcome of each review
+- Use SM-2 algorithm to adjust next review date
+- `GET /api/user-progress/{userId}`: Fetch all deck/card-level progress
+- `POST /api/user-progress`: Update learning outcome
+- `GET /api/user-progress/summary/{userId}`: Get visual dashboard data (retention %, accuracy, active streaks)
+
 ## 🔒 Security
+
 - JWT Authentication
 - Role-based Access Control (USER, ADMIN)
 - Input validation
@@ -73,6 +91,7 @@
 ---
 
 ## 🧪 Testing & CI/CD
+
 - Unit tests for services
 - Integration tests for endpoints
 - Frontend tests (React Testing Library)
@@ -82,6 +101,7 @@
 ---
 
 ## 🐳 Deployment Strategy
+
 - Docker for backend, frontend, and database
 - Reverse proxy with Nginx
 - Secrets/configs via environment variables
@@ -90,6 +110,7 @@
 ---
 
 ## 📁 Backend Structure
+
 ```
 src/
 ├── config/
@@ -104,6 +125,7 @@ src/
 ```
 
 ## 📁 Frontend Structure
+
 ```
 src/
 ├── components/
@@ -117,12 +139,3 @@ src/
 
 ---
 
-## ✅ Summary Table
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST   | /api/auth/register | Register a new user |
-| GET    | /api/decks/user/{id} | Get user decks |
-| POST   | /api/ai/explain | AI explanation of topic |
-| GET    | /api/schedule/{userId} | Get review schedule |
-| POST   | /api/cards/generate | Generate flashcards using AI |
