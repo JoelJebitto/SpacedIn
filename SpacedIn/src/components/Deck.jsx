@@ -2,7 +2,13 @@ import LearnButton from "./LearnButton";
 import { useNavigate } from "react-router-dom";
 import CircleProgressBar from "./CircleProgressBar";
 
-export default function Deck({ title, description, id, createdOn, progress = 0 }) {
+export default function Deck({
+  title,
+  description,
+  id,
+  createdOn,
+  progress = 0,
+}) {
   const dateObject = new Date(createdOn);
 
   const options = {
@@ -18,11 +24,11 @@ export default function Deck({ title, description, id, createdOn, progress = 0 }
   };
 
   return (
-    <div
-      onClick={handleOpen}
-      className="bg-black/50 flex flex-col mx-auto my-2 p-5 text-white w-full md:w-[47%] rounded-xl shadow-2xl cursor-pointer"
-    >
-      <div className="flex justify-between items-start">
+    <div className="bg-black/50 flex flex-col mx-auto my-2 p-5 text-white w-full md:w-[47%] rounded-xl shadow-2xl ">
+      <div
+        onClick={handleOpen}
+        className="flex justify-between cursor-pointer items-start"
+      >
         <div>
           <h1 className="text-3xl font-bold">{title}</h1>
           <p className="text-gray-300 text-md">{formattedDate}</p>

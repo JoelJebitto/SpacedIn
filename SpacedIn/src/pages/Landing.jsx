@@ -8,8 +8,10 @@ export default function Landing() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center text-center py-40 px-5">
-      <h1 className="text-5xl font-bold text-gray-900 mb-6">Welcome to SpacedIn</h1>
+    <div className="flex flex-col items-center justify-center text-center py-40 mx-auto px-5">
+      <h1 className="text-5xl font-bold text-gray-900 mb-6">
+        Welcome to SpacedIn
+      </h1>
       <p className="text-gray-800 text-lg mb-8">
         Master your subjects with spaced repetition.
       </p>

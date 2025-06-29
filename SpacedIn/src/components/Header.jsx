@@ -27,7 +27,14 @@ const Header = () => {
 
   return (
     <div className="bg-black/99 z-100 flex w-full px-5 py-3 text-white shadow-2xl lg:w-[60rem] lg:rounded-2xl mx-auto lg:mt-3 ">
-      <h1 className="flex-1 text-xl font-bold my-auto">SpacedIn</h1>
+      <h1
+        onClick={() => {
+          navigate("/dashboard");
+        }}
+        className="flex-1 cursor-pointer text-xl font-bold my-auto"
+      >
+        SpacedIn
+      </h1>
       <div className="flex">
         {token ? (
           <Btn onClick={handleLogout}>Logout</Btn>
