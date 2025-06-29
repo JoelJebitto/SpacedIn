@@ -1,6 +1,7 @@
 package com.joeljebitto.SpacedIn.entity;
 
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 public class Flashcard {
@@ -9,6 +10,7 @@ public class Flashcard {
     private Long id;
     private String question;
     private String answer;
+    @JsonBackReference
     @ManyToOne
     private Deck deck;
 

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 public class Deck {
@@ -16,6 +17,7 @@ public class Deck {
   @ManyToOne
   private User owner;
 
+  @JsonManagedReference
   @OneToMany(mappedBy = "deck", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Flashcard> flashcards = new ArrayList<>();
 
