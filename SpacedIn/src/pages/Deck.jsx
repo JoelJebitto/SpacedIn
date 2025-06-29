@@ -34,7 +34,7 @@ const Deck = () => {
         <h1 className="text-white text-4xl font-bold">{deck.title}</h1>
         <p className="text-gray-100">{deck.description}</p>
       </div>
-      <DeckOverview deckId={id} />
+      <DeckOverview deckId={id} deck={deck} />
       <Cards cards={cards} />
     </div>
   );

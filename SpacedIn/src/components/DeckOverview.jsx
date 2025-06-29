@@ -1,10 +1,11 @@
 import { useEffect } from "react";
 import AddCardButton from "./AddCardButton";
+import EditDeckButton from "./EditDeckButton";
 import LearnButton from "./LearnButton";
 import ProgressBar from "./ProgressBar";
 import useDeckProgressStore from "../store/useDeckProgressStore";
 
-const DeckOverview = ({ deckId }) => {
+const DeckOverview = ({ deckId, deck }) => {
   const { progressMap, fetchProgress } = useDeckProgressStore();
   useEffect(() => {
     fetchProgress(deckId);
@@ -18,6 +19,9 @@ const DeckOverview = ({ deckId }) => {
       <div className="flex sm:flex-row-reverse flex-col-reverse  sm:pt-5">
         <LearnButton className="w-full sm:w-1/3" />
         <AddCardButton deckId={deckId} className="w-full sm:w-1/3 sm:mx-2" />
+        {deck && (
+          <EditDeckButton deck={deck} className="w-full sm:w-1/3" />
+        )}
       </div>
     </div>
   );

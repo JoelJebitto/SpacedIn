@@ -2,7 +2,7 @@ import { useState } from "react";
 import EditCardButton from "./EditCardButton";
 import LearnButton from "./LearnButton";
 
-const Card = ({ front, back }) => {
+const Card = ({ id, deckId, front, back }) => {
   const [showBack, setShowBack] = useState(false);
   const toggle = () => setShowBack((s) => !s);
 
@@ -14,7 +14,13 @@ const Card = ({ front, back }) => {
       <h1 className="text-xl font-semibold mb-2">{front}</h1>
       {showBack && <p className="text-gray-300 flex-1 mb-3">{back}</p>}
       <div className="flex flex-col mt-2">
-        <EditCardButton className="w-full" />
+        <EditCardButton
+          deckId={deckId}
+          id={id}
+          front={front}
+          back={back}
+          className="w-full"
+        />
         <LearnButton className="w-full" />
       </div>
     </div>

@@ -43,6 +43,29 @@ const useCardStore = create((set) => ({
       console.error(error);
     }
   },
+  updateCard: async (deckId, id, front, back) => {
+    try {
+      const token = localStorage.getItem("token");
+      const res = await fetch(
+        `http://localhost:8080/api/v1/decks/${deckId}/cards/${id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ front, back }),
+        }
+      );
+      if (!res.ok) throw new Error("Failed to update card");
+      const updated = await res.json();
+      set((state) => ({
+        cards: state.cards.map((c) => (c.id === id ? updated : c)),
+      }));
+    } catch (error) {
+      console.error(error);
+    }
+  },
 }));
 
 export default useCardStore;
