@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-const useDeckStore = create((set, get) => ({
+const useDeckStore = create((set) => ({
   // state
   decks: [],
 

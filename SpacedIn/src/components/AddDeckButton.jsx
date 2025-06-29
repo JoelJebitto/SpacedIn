@@ -7,7 +7,7 @@ export default function AddDeckButton() {
   const name = useRef();
   const { createDeck } = useDeckStore();
   const handleCreateDeck = () => {
-    const e = createDeck(name.current.value);
+    createDeck(name.current.value);
     setOpen(false);
   };
   return (
