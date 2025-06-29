@@ -44,7 +44,9 @@ export default function EditDeckButton({ deck, className }) {
             >
               &times;
             </button>
-            <h2 className="text-lg font-semibold mb-4 text-gray-200 ">Edit Deck</h2>
+            <h2 className="text-lg font-semibold mb-4 text-gray-200 ">
+              Edit Deck
+            </h2>
             <input
               ref={name}
               defaultValue={deck.title}

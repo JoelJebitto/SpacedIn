@@ -16,10 +16,10 @@ const useDeckProgressStore = create((set) => ({
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
-      if (res.status === 404) {
+      if (res.status === 404 || res.status === 403) {
         set((state) => ({
           progressMap: { ...state.progressMap, [deckId]: 0 },
         }));
