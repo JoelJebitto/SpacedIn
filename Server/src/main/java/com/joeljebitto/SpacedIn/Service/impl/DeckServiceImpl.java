@@ -6,12 +6,15 @@ import org.springframework.transaction.annotation.Transactional;
 import com.joeljebitto.SpacedIn.DTO.DeckRequest;
 import com.joeljebitto.SpacedIn.DTO.DeckResponse;
 import com.joeljebitto.SpacedIn.Entity.Deck;
+import com.joeljebitto.SpacedIn.Entity.DeckProgress;
 import com.joeljebitto.SpacedIn.Entity.User;
+import com.joeljebitto.SpacedIn.Repository.DeckProgressRepository;
 import com.joeljebitto.SpacedIn.Repository.DeckRepository;
 import com.joeljebitto.SpacedIn.Repository.UserRepository;
 import com.joeljebitto.SpacedIn.Service.DeckService;
 import com.joeljebitto.SpacedIn.exception.ResourceNotFoundException;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,10 +24,13 @@ import java.util.stream.Collectors;
 public class DeckServiceImpl implements DeckService {
   private final DeckRepository deckRepo;
   private final UserRepository userRepo;
+  private final DeckProgressRepository deckProgressRepo;
 
-  public DeckServiceImpl(DeckRepository deckRepo, UserRepository userRepo) {
+  public DeckServiceImpl(DeckRepository deckRepo, UserRepository userRepo,
+      DeckProgressRepository deckProgressRepo) {
     this.deckRepo = deckRepo;
     this.userRepo = userRepo;
+    this.deckProgressRepo = deckProgressRepo;
   }
 
   @Override
@@ -38,6 +44,8 @@ public class DeckServiceImpl implements DeckService {
     deck.setUser(user);
 
     Deck saved = deckRepo.save(deck);
+    DeckProgress progress = new DeckProgress(saved, user, BigDecimal.ZERO);
+    deckProgressRepo.save(progress);
     return toResponse(saved);
   }
 
