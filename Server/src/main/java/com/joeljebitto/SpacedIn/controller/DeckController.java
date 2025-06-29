@@ -1,5 +1,6 @@
 package com.joeljebitto.SpacedIn.controller;
 
+import com.joeljebitto.SpacedIn.dto.DeckDTO;
 import com.joeljebitto.SpacedIn.dto.DeckRequest;
 import com.joeljebitto.SpacedIn.entity.Deck;
 import com.joeljebitto.SpacedIn.service.DeckService;
@@ -11,35 +12,35 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/decks")
 public class DeckController {
-    private final DeckService deckService;
+  private final DeckService deckService;
 
-    public DeckController(DeckService deckService) {
-        this.deckService = deckService;
-    }
+  public DeckController(DeckService deckService) {
+    this.deckService = deckService;
+  }
 
-    @PostMapping("/{userId}")
-    public ResponseEntity<Deck> createDeck(@PathVariable Long userId, @RequestBody DeckRequest request) {
-        return ResponseEntity.ok(deckService.createDeck(userId, request));
-    }
+  @PostMapping("/{userId}")
+  public ResponseEntity<Deck> createDeck(@PathVariable Long userId, @RequestBody DeckRequest request) {
+    return ResponseEntity.ok(deckService.createDeck(userId, request));
+  }
 
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<List<Deck>> getUserDecks(@PathVariable Long userId) {
-        return ResponseEntity.ok(deckService.getUserDecks(userId));
-    }
+  @GetMapping("/user/{userId}")
+  public ResponseEntity<List<DeckDTO>> getUserDecks(@PathVariable Long userId) {
+    return ResponseEntity.ok(deckService.getUserDecks(userId));
+  }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Deck> updateDeck(@PathVariable Long id, @RequestBody DeckRequest request) {
-        return ResponseEntity.ok(deckService.updateDeck(id, request));
-    }
+  @PutMapping("/{id}")
+  public ResponseEntity<Deck> updateDeck(@PathVariable Long id, @RequestBody DeckRequest request) {
+    return ResponseEntity.ok(deckService.updateDeck(id, request));
+  }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteDeck(@PathVariable Long id) {
-        deckService.deleteDeck(id);
-        return ResponseEntity.ok().build();
-    }
+  @DeleteMapping("/{id}")
+  public ResponseEntity<Void> deleteDeck(@PathVariable Long id) {
+    deckService.deleteDeck(id);
+    return ResponseEntity.ok().build();
+  }
 
-    @GetMapping("/share/{id}")
-    public ResponseEntity<Deck> shareDeck(@PathVariable Long id) {
-        return ResponseEntity.ok(deckService.getDeck(id));
-    }
+  @GetMapping("/share/{id}")
+  public ResponseEntity<Deck> shareDeck(@PathVariable Long id) {
+    return ResponseEntity.ok(deckService.getDeck(id));
+  }
 }
