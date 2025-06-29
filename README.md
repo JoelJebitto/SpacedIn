@@ -35,3 +35,4 @@ pnpm dev
 
 The frontend dev server runs at `http://localhost:5173`.
 The frontend now includes a dashboard for managing decks and pages to view and add flashcards. Decks and cards can also be removed.
+=======

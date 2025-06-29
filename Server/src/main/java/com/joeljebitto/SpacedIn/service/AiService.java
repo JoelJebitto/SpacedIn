@@ -8,7 +8,6 @@ public class AiService {
         // Placeholder for OpenAI API integration
         return "AI explanation for: " + question;
     }
-
     public String helpCard(Long cardId) {
         return "AI help for card " + cardId;
     }
