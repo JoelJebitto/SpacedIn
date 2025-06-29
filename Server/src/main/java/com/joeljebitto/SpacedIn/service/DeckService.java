@@ -31,4 +31,18 @@ public class DeckService {
         User owner = userRepository.findById(userId).orElseThrow();
         return deckRepository.findByOwner(owner);
     }
+
+    public Deck updateDeck(Long deckId, DeckRequest request) {
+        Deck deck = deckRepository.findById(deckId).orElseThrow();
+        deck.setTitle(request.getTitle());
+        return deckRepository.save(deck);
+    }
+
+    public void deleteDeck(Long id) {
+        deckRepository.deleteById(id);
+    }
+
+    public Deck getDeck(Long id) {
+        return deckRepository.findById(id).orElseThrow();
+    }
 }

@@ -26,4 +26,20 @@ public class DeckController {
     public ResponseEntity<List<Deck>> getUserDecks(@PathVariable Long userId) {
         return ResponseEntity.ok(deckService.getUserDecks(userId));
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Deck> updateDeck(@PathVariable Long id, @RequestBody DeckRequest request) {
+        return ResponseEntity.ok(deckService.updateDeck(id, request));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteDeck(@PathVariable Long id) {
+        deckService.deleteDeck(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/share/{id}")
+    public ResponseEntity<Deck> shareDeck(@PathVariable Long id) {
+        return ResponseEntity.ok(deckService.getDeck(id));
+    }
 }
