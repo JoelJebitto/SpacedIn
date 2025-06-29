@@ -1,13 +1,21 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import useDeckStore from "../store/useDeckStore";
-import { useRef } from "react";
+import useDeckProgressStore from "../store/useDeckProgressStore";
 
 export default function AddDeckButton() {
   const [open, setOpen] = useState(false);
   const name = useRef();
+  const description = useRef();
   const { createDeck } = useDeckStore();
-  const handleCreateDeck = () => {
-    createDeck(name.current.value);
+  const { fetchProgress } = useDeckProgressStore();
+  const handleCreateDeck = async () => {
+    const newDeck = await createDeck(
+      name.current.value,
+      description.current.value
+    );
+    if (newDeck) {
+      fetchProgress(newDeck.id);
+    }
     setOpen(false);
   };
   return (
@@ -42,7 +50,12 @@ export default function AddDeckButton() {
               ref={name}
               type="text"
               placeholder="Deck name"
-              className="w-full px-4 py-2 border rounded-md focus:outline-none bg-gray-900 text-white focus:ring focus:ring-blue-400 "
+              className="w-full px-4 py-2 mb-3 border rounded-md focus:outline-none bg-gray-900 text-white focus:ring focus:ring-blue-400 "
+            />
+            <textarea
+              ref={description}
+              placeholder="Description"
+              className="w-full px-4 py-2 mb-3 border rounded-md focus:outline-none bg-gray-900 text-white focus:ring focus:ring-blue-400"
             />
             <button
               className="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
