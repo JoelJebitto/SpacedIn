@@ -32,7 +32,7 @@ public class AuthService {
     public AuthResponse login(LoginRequest req) {
         User user = userRepository.findByUsername(req.getUsername()).orElseThrow();
         if (passwordEncoder.matches(req.getPassword(), user.getPassword())) {
-            String token = jwtUtils.generateToken(user.getUsername());
+            String token = jwtUtils.generateToken(user);
             return new AuthResponse(token);
         }
         throw new RuntimeException("Invalid credentials");
