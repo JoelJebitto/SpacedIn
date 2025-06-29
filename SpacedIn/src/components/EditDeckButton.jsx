@@ -1,20 +1,14 @@
-import { useState } from "react";
-import useCardStore from "../store/useCardStore";
+import { useState, useRef } from "react";
+import useDeckStore from "../store/useDeckStore";
 
-export default function EditCardButton({
-  deckId,
-  id,
-  front: initialFront,
-  back: initialBack,
-  className,
-}) {
+export default function EditDeckButton({ deck, className }) {
   const [open, setOpen] = useState(false);
-  const [front, setFront] = useState(initialFront);
-  const [back, setBack] = useState(initialBack);
-  const { updateCard } = useCardStore();
+  const name = useRef();
+  const description = useRef();
+  const { updateDeck } = useDeckStore();
 
-  const handleUpdate = () => {
-    updateCard(deckId, id, front, back);
+  const handleUpdateDeck = async () => {
+    await updateDeck(deck.id, name.current.value, description.current.value);
     setOpen(false);
   };
 
@@ -24,7 +18,7 @@ export default function EditCardButton({
         onClick={() => setOpen(true)}
         className={`bg-orange-700 p-5 shadow-2xl mt-3 flex justify-center rounded-2xl text-gray-200 font-bold active:bg-orange-500 hover:bg-orange-600 ${className}`}
       >
-        Edit Card
+        Edit Deck
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -50,24 +44,23 @@ export default function EditCardButton({
             >
               &times;
             </button>
-            <h2 className="text-lg font-semibold mb-4 text-gray-200">Edit Card</h2>
+            <h2 className="text-lg font-semibold mb-4 text-gray-200 ">Edit Deck</h2>
             <input
-              value={front}
-              onChange={(e) => setFront(e.target.value)}
+              ref={name}
+              defaultValue={deck.title}
               type="text"
-              placeholder="Front"
-              className="w-full px-4 py-2 mb-3 bg-gray-900 border rounded-md text-white focus:outline-none focus:ring focus:ring-blue-400"
+              placeholder="Deck name"
+              className="w-full px-4 py-2 mb-3 border rounded-md focus:outline-none bg-gray-900 text-white focus:ring focus:ring-blue-400 "
             />
-            <input
-              value={back}
-              onChange={(e) => setBack(e.target.value)}
-              type="text"
-              placeholder="Back"
-              className="w-full px-4 py-2 mb-3 bg-gray-900 border rounded-md text-white focus:outline-none focus:ring focus:ring-blue-400"
+            <textarea
+              ref={description}
+              defaultValue={deck.description}
+              placeholder="Description"
+              className="w-full px-4 py-2 mb-3 border rounded-md focus:outline-none bg-gray-900 text-white focus:ring focus:ring-blue-400"
             />
             <button
-              className="mt-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
-              onClick={handleUpdate}
+              className="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
+              onClick={handleUpdateDeck}
             >
               Save
             </button>
