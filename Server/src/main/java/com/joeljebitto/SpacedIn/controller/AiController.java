@@ -17,4 +17,15 @@ public class AiController {
     public ResponseEntity<String> explain(@RequestBody String q) {
         return ResponseEntity.ok(aiService.explain(q));
     }
+
+
+    @GetMapping("/help-card/{id}")
+    public ResponseEntity<String> helpCard(@PathVariable Long id) {
+        return ResponseEntity.ok(aiService.helpCard(id));
+    }
+
+    @PostMapping("/generate-cards")
+    public ResponseEntity<String> generate(@RequestBody String topic) {
+        return ResponseEntity.ok(aiService.generateCards(topic));
+    }
 }
