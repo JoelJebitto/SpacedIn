@@ -19,11 +19,9 @@ function SignUp() {
 
     const contentType = res.headers.get("content-type");
 
-    console.log("helook");
     if (res.ok && contentType) {
       const data = await res.json();
       setToken(data.token);
-      console.log("heloo");
       navigate("/dashboard");
     } else {
       const errorText = await res.text(); // fallback
