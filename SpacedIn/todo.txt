@@ -1,2 +1,4 @@
 Completed: login and sign up pages
-
+Completed: dashboard with deck management
+Completed: deck page with flashcard list
+Pending: AI assistant integration
