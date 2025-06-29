@@ -7,7 +7,6 @@ const useDeckProgressStore = create((set) => ({
     try {
       const token = localStorage.getItem("token");
       if (!token) throw new Error("No auth token found");
-      console.log(deckId); // Should not be undefined
       const res = await fetch(
         `http://localhost:8080/api/v1/decks/${deckId}/progress`,
         {
