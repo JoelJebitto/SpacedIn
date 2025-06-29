@@ -1,8 +1,15 @@
 import { useState } from "react";
+import useDeckStore from "../store/useDeckStore";
+import { useRef } from "react";
 
 export default function AddDeckButton() {
   const [open, setOpen] = useState(false);
-
+  const name = useRef();
+  const { createDeck } = useDeckStore();
+  const handleCreateDeck = () => {
+    const e = createDeck(name.current.value);
+    setOpen(false);
+  };
   return (
     <>
       {/* Floating Button */}
@@ -21,7 +28,7 @@ export default function AddDeckButton() {
       {/* Modal */}
       {open && (
         <div className="fixed inset-0 bg-black/50 flex  items-center justify-center z-50">
-          <div className="bg-gray-900 p-6 rounded-xl border border-gray-100 w-full max-w-md shadow-lg relative">
+          <div className="bg-gray-900 p-6 rounded-xl border border-gray-700 w-full max-w-md shadow-2xl relative">
             <button
               onClick={() => setOpen(false)}
               className="absolute top-2 right-3 text-gray-100 hover:text-red-500 text-xl"
@@ -32,11 +39,15 @@ export default function AddDeckButton() {
               Add New Deck
             </h2>
             <input
+              ref={name}
               type="text"
               placeholder="Deck name"
               className="w-full px-4 py-2 border rounded-md focus:outline-none bg-gray-900 text-white focus:ring focus:ring-blue-400 "
             />
-            <button className="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
+            <button
+              className="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
+              onClick={handleCreateDeck}
+            >
               Create
             </button>
           </div>

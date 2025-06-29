@@ -46,8 +46,9 @@ const useDeckStore = create((set, get) => ({
       if (!res.ok) throw new Error("Failed to create deck");
       const newDeck = await res.json();
       set((state) => ({ decks: [...state.decks, newDeck] }));
+      return null;
     } catch (error) {
-      console.error(error);
+      return error;
     }
   },
 

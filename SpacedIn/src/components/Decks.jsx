@@ -2,29 +2,6 @@ import { useEffect } from "react";
 import useDeckStore from "../store/useDeckStore";
 import Deck from "./Deck";
 
-const lDeck = [
-  {
-    title: "English",
-    description: "Consepts of Class 11",
-    id: 0,
-  },
-  {
-    title: "Math",
-    description: "Consepts of Class 11",
-    id: 1,
-  },
-  {
-    title: "Science",
-    description: "Consepts of Class 11",
-    id: 2,
-  },
-  {
-    title: "Chemistry",
-    description: "Consepts of Class 11",
-    id: 3,
-  },
-];
-
 const Decks = () => {
   const { decks, getMyDecks } = useDeckStore();
 
