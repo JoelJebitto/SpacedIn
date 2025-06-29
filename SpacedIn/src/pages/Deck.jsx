@@ -9,17 +9,18 @@ const Deck = () => {
   const [deck, setDeck] = useState(null);
   const { cards, getCards } = useCardStore();
 
+  const fetchDeck = async () => {
+    const token = localStorage.getItem("token");
+    const res = await fetch(`http://localhost:8080/api/v1/decks/${id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (res.ok) {
+      const data = await res.json();
+      setDeck(data);
+    }
+  };
+
   useEffect(() => {
-    const fetchDeck = async () => {
-      const token = localStorage.getItem("token");
-      const res = await fetch(`http://localhost:8080/api/v1/decks/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (res.ok) {
-        const data = await res.json();
-        setDeck(data);
-      }
-    };
     fetchDeck();
     getCards(id);
   }, [id, getCards]);
@@ -34,7 +35,7 @@ const Deck = () => {
         <h1 className="text-white text-4xl font-bold">{deck.title}</h1>
         <p className="text-gray-100">{deck.description}</p>
       </div>
-      <DeckOverview deckId={id} deck={deck} />
+      <DeckOverview deckId={id} deck={deck} onDeckUpdated={fetchDeck} />
       <Cards cards={cards} />
     </div>
   );

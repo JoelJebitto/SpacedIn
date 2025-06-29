@@ -5,7 +5,7 @@ import LearnButton from "./LearnButton";
 import ProgressBar from "./ProgressBar";
 import useDeckProgressStore from "../store/useDeckProgressStore";
 
-const DeckOverview = ({ deckId, deck }) => {
+const DeckOverview = ({ deckId, deck, onDeckUpdated }) => {
   const { progressMap, fetchProgress } = useDeckProgressStore();
   useEffect(() => {
     fetchProgress(deckId);
@@ -20,7 +20,11 @@ const DeckOverview = ({ deckId, deck }) => {
         <LearnButton className="w-full sm:w-1/3" />
         <AddCardButton deckId={deckId} className="w-full sm:w-1/3 sm:mx-2" />
         {deck && (
-          <EditDeckButton deck={deck} className="w-full sm:w-1/3" />
+          <EditDeckButton
+            deck={deck}
+            onUpdated={onDeckUpdated}
+            className="w-full sm:w-1/3"
+          />
         )}
       </div>
     </div>

@@ -1,14 +1,21 @@
 import { useState, useRef } from "react";
 import useDeckStore from "../store/useDeckStore";
 
-export default function EditDeckButton({ deck, className }) {
+export default function EditDeckButton({ deck, className, onUpdated }) {
   const [open, setOpen] = useState(false);
   const name = useRef();
   const description = useRef();
   const { updateDeck } = useDeckStore();
 
   const handleUpdateDeck = async () => {
-    await updateDeck(deck.id, name.current.value, description.current.value);
+    const updated = await updateDeck(
+      deck.id,
+      name.current.value,
+      description.current.value,
+    );
+    if (updated && onUpdated) {
+      onUpdated(updated);
+    }
     setOpen(false);
   };
 
