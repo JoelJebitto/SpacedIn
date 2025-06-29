@@ -69,8 +69,10 @@ const useDeckStore = create((set) => ({
       set((state) => ({
         decks: state.decks.map((d) => (d.id === id ? updated : d)),
       }));
+      return updated;
     } catch (error) {
       console.error(error);
+      return null;
     }
   },
 

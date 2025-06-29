@@ -27,13 +27,13 @@ public class JwtAuthFilter extends OncePerRequestFilter {
   private CustomUserDetailsService userDetailsService;
 
   /**
-   * Don’t run the filter on auth endpoints.
+   * Skip filtering for auth endpoints and CORS pre-flight requests.
    */
   @Override
   protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
     String path = request.getServletPath();
-    // adjust these to match your auth endpoints
-    return path.startsWith("/api/v1/auth");
+    // Skip auth paths and OPTIONS preflight requests
+    return "OPTIONS".equalsIgnoreCase(request.getMethod()) || path.startsWith("/api/v1/auth");
   }
 
   @Override
