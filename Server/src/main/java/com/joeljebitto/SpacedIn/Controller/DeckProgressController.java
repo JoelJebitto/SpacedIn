@@ -15,7 +15,7 @@ import com.joeljebitto.SpacedIn.Service.DeckProgressService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/v1/decks/{deckId}/progress")
+@RequestMapping("/api/v1/decks")
 public class DeckProgressController {
 
   private final DeckProgressService service;
@@ -24,7 +24,7 @@ public class DeckProgressController {
     this.service = service;
   }
 
-  @PostMapping
+  @PostMapping("/{deckId}/progress")
   public ResponseEntity<DeckProgressResponse> createProgress(
       @PathVariable Long deckId,
       @Valid @RequestBody DeckProgressRequest request,
@@ -33,14 +33,14 @@ public class DeckProgressController {
     return new ResponseEntity<>(created, HttpStatus.CREATED);
   }
 
-  @GetMapping
+  @GetMapping("/{deckId}/progress")
   public ResponseEntity<DeckProgressResponse> getProgress(
       @PathVariable Long deckId,
       @AuthenticationPrincipal CustomUserDetails user) {
     return ResponseEntity.ok(service.getProgress(deckId, user.getId()));
   }
 
-  @PutMapping
+  @PutMapping("/{deckId}/progress")
   public ResponseEntity<DeckProgressResponse> updateProgress(
       @PathVariable Long deckId,
       @Valid @RequestBody DeckProgressRequest request,
@@ -48,7 +48,7 @@ public class DeckProgressController {
     return ResponseEntity.ok(service.updateProgress(deckId, request, user.getId()));
   }
 
-  @DeleteMapping
+  @DeleteMapping("/{deckId}/progress")
   public ResponseEntity<Void> deleteProgress(
       @PathVariable Long deckId,
       @AuthenticationPrincipal CustomUserDetails user) {
@@ -56,7 +56,7 @@ public class DeckProgressController {
     return ResponseEntity.noContent().build();
   }
 
-  @GetMapping("/user")
+  @GetMapping("/progress/user")
   public ResponseEntity<List<DeckProgressResponse>> getUserProgress(
       @AuthenticationPrincipal CustomUserDetails user) {
     return ResponseEntity.ok(service.getProgressForUser(user.getId()));

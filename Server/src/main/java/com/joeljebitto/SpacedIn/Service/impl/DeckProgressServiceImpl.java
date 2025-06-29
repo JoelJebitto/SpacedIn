@@ -54,6 +54,7 @@ public class DeckProgressServiceImpl implements DeckProgressService {
   public DeckProgressResponse getProgress(Long deckId, Long userId) {
     DeckProgress progress = progressRepo.findByUserIdAndDeckId(userId, deckId);
     if (progress == null) {
+      System.out.print("hiii \n \n\n ");
       throw new ResourceNotFoundException("DeckProgress", "deckId", deckId);
     }
     return toResponse(progress);
