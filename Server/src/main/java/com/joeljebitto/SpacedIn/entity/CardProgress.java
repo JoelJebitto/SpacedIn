@@ -10,15 +10,25 @@ public class CardProgress {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne
+    @JoinColumn(name = "card_id")
     private Flashcard card;
 
+    @Column(name = "easiness_factor")
     private double easinessFactor = 2.5;
+
     private int repetitions = 0;
+
+    @Column(name = "interval_days")
     private int interval;
+
+    @Column(name = "last_review")
     private LocalDate lastReviewed;
+
+    @Column(name = "next_review")
     private LocalDate nextReviewDate;
 
     public Long getId() { return id; }
