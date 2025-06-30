@@ -8,7 +8,8 @@ import com.joeljebitto.SpacedIn.repository.FlashcardRepository;
 import com.joeljebitto.SpacedIn.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.util.stream.Collectors;
 import java.util.List;
 
 @Service
@@ -28,32 +29,57 @@ public class ProgressService {
         return progressRepository.findByUser(user);
     }
 
-    public CardProgress updateProgress(Long userId, Long cardId, int quality) {
+    public CardProgress reviewCard(Long userId, Long cardId, int quality) {
         User user = userRepository.findById(userId).orElseThrow();
         Flashcard card = cardRepository.findById(cardId).orElseThrow();
-        CardProgress progress = progressRepository
-                .findByUser(user)
-                .stream()
-                .filter(p -> p.getCard().equals(card))
-                .findFirst()
-                .orElseGet(() -> {
-                    CardProgress p = new CardProgress();
-                    p.setUser(user);
-                    p.setCard(card);
-                    p.setEasinessFactor(2.5);
-                    p.setIntervalDays(1);
-                    return p;
-                });
 
-        double ef = Math.max(1.3, progress.getEasinessFactor() + (0.1 - (5 - quality) * (0.08 + (5 - quality) * 0.02)));
-        int interval = progress.getRepetitions() == 0 ? 1 : (progress.getRepetitions() == 1 ? 6 : (int) Math.round(progress.getIntervalDays() * ef));
+        CardProgress progress = progressRepository.findByUserAndCard(user, card);
+        if (progress == null) {
+            progress = new CardProgress();
+            progress.setUser(user);
+            progress.setCard(card);
+            progress.setEasinessFactor(2.5);
+            progress.setRepetitions(0);
+            progress.setInterval(1);
+            progress.setNextReviewDate(LocalDate.now());
+        }
 
-        progress.setRepetitions(progress.getRepetitions() + 1);
-        progress.setIntervalDays(interval);
+        int repetitions = progress.getRepetitions();
+        int interval = progress.getInterval();
+        double ef = progress.getEasinessFactor();
+
+        if (quality < 3) {
+            repetitions = 0;
+            interval = 1;
+        } else {
+            if (repetitions == 0) interval = 1;
+            else if (repetitions == 1) interval = 6;
+            else interval = (int) Math.round(interval * ef);
+
+            ef += (0.1 - (5 - quality) * (0.08 + (5 - quality) * 0.02));
+            ef = Math.max(1.3, ef);
+            repetitions += 1;
+        }
+
+        LocalDate today = LocalDate.now();
         progress.setEasinessFactor(ef);
-        progress.setLastReview(LocalDateTime.now());
-        progress.setNextReview(LocalDateTime.now().plusDays(interval));
+        progress.setRepetitions(repetitions);
+        progress.setInterval(interval);
+        progress.setLastReviewed(today);
+        progress.setNextReviewDate(today.plusDays(interval));
 
         return progressRepository.save(progress);
+    }
+
+    public List<Flashcard> getDueCards(Long deckId, Long userId) {
+        User user = userRepository.findById(userId).orElseThrow();
+        LocalDate today = LocalDate.now();
+        return cardRepository.findByDeckId(deckId).stream()
+                .filter(card -> {
+                    CardProgress p = progressRepository.findByUserAndCard(user, card);
+                    if (p == null) return true;
+                    return !p.getNextReviewDate().isAfter(today);
+                })
+                .collect(Collectors.toList());
     }
 }
