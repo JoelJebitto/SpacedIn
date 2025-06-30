@@ -73,12 +73,7 @@ export default function CardList({ deckId, onChange }) {
                   >
                     Save
                   </button>
-                  <button
-                    onClick={() => setEditingId(null)}
-                    className="text-gray-600"
-                  >
-                    Cancel
-                  </button>
+                  <button onClick={() => setEditingId(null)} className="text-gray-600">Cancel</button>
                 </div>
               </div>
             ) : (
