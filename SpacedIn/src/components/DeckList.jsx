@@ -3,7 +3,7 @@ import useAuth from "../store/useAuth";
 import { api } from "../services/api";
 import { Link } from "react-router-dom";
 
-export default function DeckList({ userId }) {
+export default function DeckList({ userId, onChange }) {
   const { user } = useAuth();
   const [decks, setDecks] = useState([]);
   const [stats, setStats] = useState({});
@@ -34,11 +34,13 @@ export default function DeckList({ userId }) {
     const deck = await api.createDeck(user.id, { title });
     setDecks([...decks, deck]);
     setTitle("");
+    onChange && onChange();
   };
 
   const remove = async (id) => {
     await api.deleteDeck(id);
     setDecks(decks.filter((d) => d.id !== id));
+    onChange && onChange();
   };
 
   const startEdit = (deck) => {
