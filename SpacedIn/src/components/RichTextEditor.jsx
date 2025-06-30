@@ -43,5 +43,6 @@ export default function RichTextEditor({ value, onChange, placeholder }) {
         placeholder={placeholder}
       />
     </div>
+
   )
 }
