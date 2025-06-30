@@ -46,4 +46,10 @@ export const api = {
   updateCard: (id, data) =>
     request(`/api/cards/${id}`, { method: "PUT", body: JSON.stringify(data) }),
   deleteCard: (id) => request(`/api/cards/${id}`, { method: "DELETE" }),
+  getDueCards: (deckId, userId) =>
+    request(`/api/decks/${deckId}/due-cards?userId=${userId}`),
+  reviewCard: (cardId, userId, quality) =>
+    request(`/api/cards/${cardId}/review?userId=${userId}&quality=${quality}`, {
+      method: "POST",
+    }),
 };

@@ -23,6 +23,6 @@ public class ProgressController {
 
     @PostMapping
     public ResponseEntity<CardProgress> update(@RequestParam Long userId, @RequestParam Long cardId, @RequestParam int quality) {
-        return ResponseEntity.ok(progressService.updateProgress(userId, cardId, quality));
+        return ResponseEntity.ok(progressService.reviewCard(userId, cardId, quality));
     }
 }
