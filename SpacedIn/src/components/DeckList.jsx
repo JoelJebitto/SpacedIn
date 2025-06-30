@@ -31,7 +31,6 @@ export default function DeckList({ userId, onChange }) {
   const create = async (e) => {
     e.preventDefault();
     if (!title.trim()) return;
-    console.log(user.id);
     const deck = await api.createDeck(user.id, { title });
     setDecks([...decks, deck]);
     setTitle("");
@@ -54,6 +53,7 @@ export default function DeckList({ userId, onChange }) {
     const updated = await api.updateDeck(id, { title: editTitle });
     setDecks(decks.map((d) => (d.id === id ? updated : d)));
     setEditingId(null);
+    onChange && onChange();
   };
 
   return (
