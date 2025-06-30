@@ -3,7 +3,7 @@ import useAuth from "../store/useAuth";
 import { api } from "../services/api";
 import { Link } from "react-router-dom";
 
-export default function DeckList({ userId }) {
+export default function DeckList({ userId, onChange }) {
   const { user } = useAuth();
   const [decks, setDecks] = useState([]);
   const [stats, setStats] = useState({});
@@ -30,15 +30,18 @@ export default function DeckList({ userId }) {
 
   const create = async (e) => {
     e.preventDefault();
+    if (!title.trim()) return;
     console.log(user.id);
     const deck = await api.createDeck(user.id, { title });
     setDecks([...decks, deck]);
     setTitle("");
+    onChange && onChange();
   };
 
   const remove = async (id) => {
     await api.deleteDeck(id);
     setDecks(decks.filter((d) => d.id !== id));
+    onChange && onChange();
   };
 
   const startEdit = (deck) => {
@@ -47,6 +50,7 @@ export default function DeckList({ userId }) {
   };
 
   const save = async (id) => {
+    if (!editTitle.trim()) return;
     const updated = await api.updateDeck(id, { title: editTitle });
     setDecks(decks.map((d) => (d.id === id ? updated : d)));
     setEditingId(null);
@@ -61,7 +65,12 @@ export default function DeckList({ userId }) {
           placeholder="New Deck"
           className="border p-2"
         />
-        <button className="bg-green-600 text-white px-3">Add</button>
+        <button
+          className="bg-green-600 text-white px-3 disabled:opacity-50"
+          disabled={!title.trim()}
+        >
+          Add
+        </button>
       </form>
       <ul className="space-y-2">
         {decks.map((d) => (
@@ -73,7 +82,11 @@ export default function DeckList({ userId }) {
                   onChange={(e) => setEditTitle(e.target.value)}
                   className="border p-2 flex-1"
                 />
-                <button onClick={() => save(d.id)} className="text-green-600">
+                <button
+                  onClick={() => save(d.id)}
+                  className="text-green-600 disabled:opacity-50"
+                  disabled={!editTitle.trim()}
+                >
                   Save
                 </button>
                 <button
