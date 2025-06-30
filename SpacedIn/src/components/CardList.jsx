@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { api } from '../services/api'
 import RichTextEditor from './RichTextEditor'
 
-export default function CardList({ deckId }) {
+export default function CardList({ deckId, onChange }) {
   const [cards, setCards] = useState([])
   const [question, setQuestion] = useState('')
   const [answer, setAnswer] = useState('')
@@ -19,11 +19,13 @@ export default function CardList({ deckId }) {
     const card = await api.createCard({ deckId, question, answer })
     setCards([...cards, card])
     setQuestion(''); setAnswer('')
+    onChange && onChange()
   }
 
   const remove = async (id) => {
     await api.deleteCard(id)
     setCards(cards.filter(c => c.id !== id))
+    onChange && onChange()
   }
 
   const startEdit = (c) => {
@@ -39,6 +41,7 @@ export default function CardList({ deckId }) {
     })
     setCards(cards.map(c => (c.id === id ? updated : c)))
     setEditingId(null)
+    onChange && onChange()
   }
 
   return (
