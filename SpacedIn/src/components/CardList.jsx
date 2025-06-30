@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { api } from '../services/api'
 import RichTextEditor from './RichTextEditor'
 
-export default function CardList({ deckId }) {
+export default function CardList({ deckId, onChange }) {
   const [cards, setCards] = useState([])
   const [question, setQuestion] = useState('')
   const [answer, setAnswer] = useState('')
@@ -16,14 +16,17 @@ export default function CardList({ deckId }) {
 
   const create = async (e) => {
     e.preventDefault()
+    if (!question.trim() || !answer.trim()) return
     const card = await api.createCard({ deckId, question, answer })
     setCards([...cards, card])
     setQuestion(''); setAnswer('')
+    onChange && onChange()
   }
 
   const remove = async (id) => {
     await api.deleteCard(id)
     setCards(cards.filter(c => c.id !== id))
+    onChange && onChange()
   }
 
   const startEdit = (c) => {
@@ -39,6 +42,7 @@ export default function CardList({ deckId }) {
     })
     setCards(cards.map(c => (c.id === id ? updated : c)))
     setEditingId(null)
+    onChange && onChange()
   }
 
   return (
@@ -46,7 +50,12 @@ export default function CardList({ deckId }) {
       <form onSubmit={create} className="space-y-2">
         <RichTextEditor value={question} onChange={setQuestion} placeholder="Question" />
         <RichTextEditor value={answer} onChange={setAnswer} placeholder="Answer" />
-        <button className="bg-green-600 text-white px-3 mt-2">Add</button>
+        <button
+          className="bg-green-600 text-white px-3 mt-2 disabled:opacity-50"
+          disabled={!question.trim() || !answer.trim()}
+        >
+          Add
+        </button>
       </form>
       <ul className="space-y-2">
         {cards.map(c => (
