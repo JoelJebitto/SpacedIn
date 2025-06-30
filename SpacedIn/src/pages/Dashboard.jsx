@@ -31,8 +31,8 @@ export default function Dashboard() {
               }}
             />
           </div>
-          <div className="text-sm text-gray-200">
-            Reviewed {stats.reviewedCards} / {stats.totalCards} cards (Due{" "}
+          <div className="text-sm text-gray-700">
+            Reviewed {stats.reviewedCards} / {stats.totalCards} cards (Due{' '}
             {stats.dueCards})
           </div>
         </div>

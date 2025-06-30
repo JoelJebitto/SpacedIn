@@ -52,7 +52,7 @@ export default function CardList({ deckId, onChange }) {
         <RichTextEditor value={question} onChange={setQuestion} placeholder="Question" />
         <RichTextEditor value={answer} onChange={setAnswer} placeholder="Answer" />
         <button
-          className="bg-green-600 text-white px-3 mt-2 disabled:opacity-50"
+          className="bg-green-600 text-white rounded px-3 mt-2 disabled:opacity-50"
           disabled={!question.trim() || !answer.trim()}
         >
           Add
@@ -60,7 +60,7 @@ export default function CardList({ deckId, onChange }) {
       </form>
       <ul className="space-y-2">
         {cards.map(c => (
-          <li key={c.id} className="border p-2">
+          <li key={c.id} className="border rounded p-4 bg-white shadow">
             {editingId === c.id ? (
               <div className="space-y-2">
                 <RichTextEditor value={editQuestion} onChange={setEditQuestion} />
@@ -83,8 +83,15 @@ export default function CardList({ deckId, onChange }) {
                   <span className="text-sm text-gray-600 block" dangerouslySetInnerHTML={{ __html: c.answer }} />
                 </div>
                 <div className="flex gap-2">
-                  <button onClick={() => startEdit(c)} className="text-blue-600">Edit</button>
-                  <button onClick={() => remove(c.id)} className="text-red-600">X</button>
+                  <button
+                    onClick={() => startEdit(c)}
+                    className="text-blue-600"
+                  >
+                    Edit
+                  </button>
+                  <button onClick={() => remove(c.id)} className="text-red-600">
+                    X
+                  </button>
                 </div>
               </div>
             )}

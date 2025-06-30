@@ -40,7 +40,10 @@ export default function Deck() {
           </div>
         </div>
       )}
-      <Link to={`/decks/${id}/review`} className="text-green-600 block">
+      <Link
+        to={`/decks/${id}/review`}
+        className="bg-blue-600 text-white rounded px-3 py-2 inline-block"
+      >
         Study
       </Link>
       <CardList deckId={id} onChange={refreshStats} />

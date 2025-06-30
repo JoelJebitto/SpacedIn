@@ -63,10 +63,10 @@ export default function DeckList({ userId, onChange }) {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="New Deck"
-          className="border p-2"
+          className="border rounded p-2 flex-1"
         />
         <button
-          className="bg-green-600 text-white px-3 disabled:opacity-50"
+          className="bg-green-600 text-white rounded px-3 disabled:opacity-50"
           disabled={!title.trim()}
         >
           Add
@@ -74,13 +74,13 @@ export default function DeckList({ userId, onChange }) {
       </form>
       <ul className="space-y-2">
         {decks.map((d) => (
-          <li key={d.id} className="border p-2 space-y-1">
+          <li key={d.id} className="border rounded p-4 space-y-1 bg-white shadow">
             {editingId === d.id ? (
               <div className="flex justify-between items-center gap-2">
                 <input
                   value={editTitle}
                   onChange={(e) => setEditTitle(e.target.value)}
-                  className="border p-2 flex-1"
+                  className="border rounded p-2 flex-1"
                 />
                 <button
                   onClick={() => save(d.id)}
