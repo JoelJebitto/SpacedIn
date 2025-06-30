@@ -75,12 +75,14 @@ export default function DeckList({ userId, onChange }) {
       <ul className="space-y-2">
         {decks.map((d) => (
           <li key={d.id} className="border border-gray-600 rounded p-4 space-y-1 bg-gray-800 shadow">
+
             {editingId === d.id ? (
               <div className="flex justify-between items-center gap-2">
                 <input
                   value={editTitle}
                   onChange={(e) => setEditTitle(e.target.value)}
                   className="border border-gray-600 rounded p-2 flex-1 bg-gray-700 text-gray-100"
+
                 />
                 <button
                   onClick={() => save(d.id)}
