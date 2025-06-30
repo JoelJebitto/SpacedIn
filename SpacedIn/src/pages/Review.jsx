@@ -61,7 +61,7 @@ export default function Review() {
           Reviewed {reviewed} / {totalCards} cards
         </div>
       </div>
-      <div className="border p-4">
+      <div className="border rounded p-4 bg-white shadow">
         <div dangerouslySetInnerHTML={{ __html: card.question }} />
         {showAnswer && (
           <div
@@ -73,7 +73,7 @@ export default function Review() {
       {showAnswer ? (
         <div className="flex gap-2">
           {[0, 1, 2, 3, 4, 5].map((n) => (
-            <button key={n} onClick={() => grade(n)} className="border px-2">
+            <button key={n} onClick={() => grade(n)} className="border rounded px-2">
               {n}
             </button>
           ))}
@@ -81,7 +81,7 @@ export default function Review() {
       ) : (
         <button
           onClick={() => setShowAnswer(true)}
-          className="bg-blue-600 text-white px-3"
+          className="bg-blue-600 text-white rounded px-3 py-2"
         >
           Show Answer
         </button>

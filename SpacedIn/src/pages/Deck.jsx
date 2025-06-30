@@ -1,6 +1,6 @@
 import { useParams, Link } from "react-router-dom";
 import CardList from "../components/CardList.jsx";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import useAuth from "../store/useAuth";
 import { api } from "../services/api";
 
@@ -9,11 +9,15 @@ export default function Deck() {
   const { user } = useAuth();
   const [stats, setStats] = useState(null);
 
-  useEffect(() => {
+  const refreshStats = useCallback(() => {
     if (user?.id) {
       api.getDeckStats(id, user.id).then(setStats).catch(console.error);
     }
   }, [id, user]);
+
+  useEffect(() => {
+    refreshStats();
+  }, [refreshStats]);
 
   return (
     <div className="p-4 space-y-4 w-full">
@@ -36,10 +40,13 @@ export default function Deck() {
           </div>
         </div>
       )}
-      <Link to={`/decks/${id}/review`} className="text-green-600 block">
+      <Link
+        to={`/decks/${id}/review`}
+        className="bg-blue-600 text-white rounded px-3 py-2 inline-block"
+      >
         Study
       </Link>
-      <CardList deckId={id} />
+      <CardList deckId={id} onChange={refreshStats} />
     </div>
   );
 }

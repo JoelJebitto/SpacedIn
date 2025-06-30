@@ -1,18 +1,22 @@
 import DeckList from "../components/DeckList.jsx";
 import useAuth from "../store/useAuth";
 import { Navigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { api } from "../services/api";
 
 export default function Dashboard() {
   const { token, user } = useAuth();
   const [stats, setStats] = useState(null);
 
-  useEffect(() => {
+  const refreshStats = useCallback(() => {
     if (user?.id) {
       api.getUserStats(user.id).then(setStats).catch(console.error);
     }
   }, [user]);
+
+  useEffect(() => {
+    refreshStats();
+  }, [refreshStats]);
 
   if (!token) return <Navigate to="/" replace />;
   return (
@@ -27,13 +31,13 @@ export default function Dashboard() {
               }}
             />
           </div>
-          <div className="text-sm text-gray-200">
-            Reviewed {stats.reviewedCards} / {stats.totalCards} cards (Due{" "}
+          <div className="text-sm text-gray-700">
+            Reviewed {stats.reviewedCards} / {stats.totalCards} cards (Due{' '}
             {stats.dueCards})
           </div>
         </div>
       )}
-      <DeckList userId={user?.id} />
+      <DeckList userId={user?.id} onChange={refreshStats} />
     </div>
   );
 }
