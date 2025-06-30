@@ -60,7 +60,7 @@ export default function CardList({ deckId, onChange }) {
       </form>
       <ul className="space-y-2">
         {cards.map(c => (
-          <li key={c.id} className="border rounded p-4 bg-white shadow">
+          <li key={c.id} className="border border-gray-600 rounded p-4 bg-gray-800 shadow">
             {editingId === c.id ? (
               <div className="space-y-2">
                 <RichTextEditor value={editQuestion} onChange={setEditQuestion} />
@@ -73,14 +73,20 @@ export default function CardList({ deckId, onChange }) {
                   >
                     Save
                   </button>
-                  <button onClick={() => setEditingId(null)} className="text-gray-600">Cancel</button>
+                  <button
+                    onClick={() => setEditingId(null)}
+                    className="text-gray-400"
+                  >
+                    Cancel
+                  </button>
+
                 </div>
               </div>
             ) : (
               <div className="flex justify-between items-start">
                 <div>
                   <span dangerouslySetInnerHTML={{ __html: c.question }} />
-                  <span className="text-sm text-gray-600 block" dangerouslySetInnerHTML={{ __html: c.answer }} />
+                  <span className="text-sm text-gray-400 block" dangerouslySetInnerHTML={{ __html: c.answer }} />
                 </div>
                 <div className="flex gap-2">
                   <button

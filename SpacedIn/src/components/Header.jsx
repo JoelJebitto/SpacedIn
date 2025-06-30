@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import useAuth from "../store/useAuth";
 const Btn = ({ children, onClick }) => (
   <button
-    className="px-3 py-2 rounded-md hover:bg-gray-100 active:bg-gray-200 text-sm font-medium"
+    className="px-3 py-2 rounded-md hover:bg-gray-700 active:bg-gray-600 text-sm font-medium text-gray-100"
     onClick={onClick}
   >
     {children}
@@ -24,7 +24,7 @@ const Header = () => {
   };
 
   return (
-    <div className="bg-white shadow-sm flex w-full justify-between px-5 py-3 sticky top-0 z-50">
+    <div className="bg-gray-800 shadow-sm flex w-full justify-between px-5 py-3 sticky top-0 z-50 text-gray-100">
       <h1
         className="flex-1 text-xl font-bold my-auto"
         onClick={() => navigate("/dashboard")}

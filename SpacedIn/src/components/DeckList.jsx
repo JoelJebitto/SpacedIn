@@ -57,13 +57,13 @@ export default function DeckList({ userId, onChange }) {
   };
 
   return (
-    <div className="p-4 space-y-4">
+    <div className="p-4 space-y-4 text-gray-100">
       <form onSubmit={create} className="flex gap-2">
         <input
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="New Deck"
-          className="border rounded p-2 flex-1"
+          className="border border-gray-600 rounded p-2 flex-1 bg-gray-700 text-gray-100"
         />
         <button
           className="bg-green-600 text-white rounded px-3 disabled:opacity-50"
@@ -74,13 +74,15 @@ export default function DeckList({ userId, onChange }) {
       </form>
       <ul className="space-y-2">
         {decks.map((d) => (
-          <li key={d.id} className="border rounded p-4 space-y-1 bg-white shadow">
+          <li key={d.id} className="border border-gray-600 rounded p-4 space-y-1 bg-gray-800 shadow">
+
             {editingId === d.id ? (
               <div className="flex justify-between items-center gap-2">
                 <input
                   value={editTitle}
                   onChange={(e) => setEditTitle(e.target.value)}
-                  className="border rounded p-2 flex-1"
+                  className="border border-gray-600 rounded p-2 flex-1 bg-gray-700 text-gray-100"
+
                 />
                 <button
                   onClick={() => save(d.id)}
@@ -91,7 +93,7 @@ export default function DeckList({ userId, onChange }) {
                 </button>
                 <button
                   onClick={() => setEditingId(null)}
-                  className="text-gray-200"
+                  className="text-gray-400"
                 >
                   Cancel
                 </button>
@@ -114,7 +116,7 @@ export default function DeckList({ userId, onChange }) {
             )}
             {stats[d.id] && (
               <div className="space-y-1">
-                <div className="w-full h-2 bg-gray-200 rounded">
+                <div className="w-full h-2 bg-gray-700 rounded">
                   <div
                     className="h-full bg-blue-600 rounded"
                     style={{
@@ -122,7 +124,7 @@ export default function DeckList({ userId, onChange }) {
                     }}
                   />
                 </div>
-                <div className="text-xs text-gray-700">
+                <div className="text-xs text-gray-300">
                   Reviewed {stats[d.id].reviewedCards} /{" "}
                   {stats[d.id].totalCards} (Due {stats[d.id].dueCards})
                 </div>

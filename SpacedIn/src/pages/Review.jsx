@@ -46,22 +46,22 @@ export default function Review() {
   };
 
   return (
-    <div className="p-4 space-y-4 w-full">
+    <div className="p-4 space-y-4 w-full text-gray-100">
       <Link to={`/decks/${id}`} className="text-blue-600">
         Back
       </Link>
       <div className="space-y-1">
-        <div className="w-full h-2 bg-gray-200 rounded">
+        <div className="w-full h-2 bg-gray-700 rounded">
           <div
             className="h-full bg-blue-600 rounded"
             style={{ width: `${(reviewed / totalCards) * 100}%` }}
           />
         </div>
-        <div className="text-sm text-gray-700">
+        <div className="text-sm text-gray-300">
           Reviewed {reviewed} / {totalCards} cards
         </div>
       </div>
-      <div className="border rounded p-4 bg-white shadow">
+      <div className="border border-gray-600 rounded p-4 bg-gray-800 shadow">
         <div dangerouslySetInnerHTML={{ __html: card.question }} />
         {showAnswer && (
           <div

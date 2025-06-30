@@ -20,10 +20,10 @@ export default function Dashboard() {
 
   if (!token) return <Navigate to="/" replace />;
   return (
-    <div className="p-4 space-y-4 w-full">
+    <div className="p-4 space-y-4 w-full text-gray-100">
       {stats && (
         <div className="space-y-1">
-          <div className="w-full h-2 bg-gray-200 rounded">
+          <div className="w-full h-2 bg-gray-700 rounded">
             <div
               className="h-full bg-blue-600 rounded"
               style={{
@@ -31,7 +31,7 @@ export default function Dashboard() {
               }}
             />
           </div>
-          <div className="text-sm text-gray-700">
+          <div className="text-sm text-gray-300">
             Reviewed {stats.reviewedCards} / {stats.totalCards} cards (Due{' '}
             {stats.dueCards})
           </div>
