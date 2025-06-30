@@ -1,27 +1,48 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useState } from 'react'
+import {
+  Editor,
+  EditorState,
+  ContentState,
+  convertFromHTML,
+} from 'draft-js'
+import { stateToHTML } from 'draft-js-export-html'
+import 'draft-js/dist/Draft.css'
+
+const createStateFromHTML = (html) => {
+  const blocks = convertFromHTML(html || '')
+  const content = ContentState.createFromBlockArray(
+    blocks.contentBlocks,
+    blocks.entityMap,
+  )
+  return EditorState.createWithContent(content)
+}
 
 export default function RichTextEditor({ value, onChange, placeholder }) {
-  const ref = useRef(null)
+  const [editorState, setEditorState] = useState(() =>
+    createStateFromHTML(value),
+  )
 
   useEffect(() => {
-    if (ref.current && ref.current.innerHTML !== value) {
-      ref.current.innerHTML = value || ''
+    const current = stateToHTML(editorState.getCurrentContent())
+    if (value !== current) {
+      setEditorState(createStateFromHTML(value))
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value])
 
-  const handleInput = () => {
-    if (ref.current) {
-      onChange(ref.current.innerHTML)
-    }
+  const handleChange = (state) => {
+    setEditorState(state)
+    onChange(stateToHTML(state.getCurrentContent()))
   }
 
   return (
-    <div
-      ref={ref}
-      contentEditable
-      onInput={handleInput}
-      className="border p-2 min-h-[2.5rem] focus:outline-none [data-placeholder]:empty:before:content-[attr(data-placeholder)] [data-placeholder]:empty:before:text-gray-500"
-      data-placeholder={placeholder}
-    />
+    <div className="border p-2 min-h-[2.5rem]">
+      <Editor
+        editorState={editorState}
+        onChange={handleChange}
+        placeholder={placeholder}
+      />
+    </div>
+
   )
 }
