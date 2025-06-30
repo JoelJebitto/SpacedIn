@@ -1,10 +1,14 @@
 import { useEffect, useState } from 'react'
 import { api } from '../services/api'
+import RichTextEditor from './RichTextEditor'
 
 export default function CardList({ deckId }) {
   const [cards, setCards] = useState([])
   const [question, setQuestion] = useState('')
   const [answer, setAnswer] = useState('')
+  const [editingId, setEditingId] = useState(null)
+  const [editQuestion, setEditQuestion] = useState('')
+  const [editAnswer, setEditAnswer] = useState('')
 
   useEffect(() => {
     api.getCards(deckId).then(setCards).catch(console.error)
@@ -22,21 +26,52 @@ export default function CardList({ deckId }) {
     setCards(cards.filter(c => c.id !== id))
   }
 
+  const startEdit = (c) => {
+    setEditingId(c.id)
+    setEditQuestion(c.question)
+    setEditAnswer(c.answer)
+  }
+
+  const save = async (id) => {
+    const updated = await api.updateCard(id, {
+      question: editQuestion,
+      answer: editAnswer,
+    })
+    setCards(cards.map(c => (c.id === id ? updated : c)))
+    setEditingId(null)
+  }
+
   return (
     <div className="space-y-4">
-      <form onSubmit={create} className="flex gap-2">
-        <input value={question} onChange={e=>setQuestion(e.target.value)} placeholder="Question" className="border p-2" />
-        <input value={answer} onChange={e=>setAnswer(e.target.value)} placeholder="Answer" className="border p-2" />
-        <button className="bg-green-600 text-white px-3">Add</button>
+      <form onSubmit={create} className="space-y-2">
+        <RichTextEditor value={question} onChange={setQuestion} placeholder="Question" />
+        <RichTextEditor value={answer} onChange={setAnswer} placeholder="Answer" />
+        <button className="bg-green-600 text-white px-3 mt-2">Add</button>
       </form>
       <ul className="space-y-2">
         {cards.map(c => (
-          <li key={c.id} className="border p-2 flex justify-between items-center">
-            <div>
-              <span>{c.question}</span>
-              <span className="text-sm text-gray-600 block">{c.answer}</span>
-            </div>
-            <button onClick={() => remove(c.id)} className="text-red-600">X</button>
+          <li key={c.id} className="border p-2">
+            {editingId === c.id ? (
+              <div className="space-y-2">
+                <RichTextEditor value={editQuestion} onChange={setEditQuestion} />
+                <RichTextEditor value={editAnswer} onChange={setEditAnswer} />
+                <div className="flex gap-2">
+                  <button onClick={() => save(c.id)} className="text-green-600">Save</button>
+                  <button onClick={() => setEditingId(null)} className="text-gray-600">Cancel</button>
+                </div>
+              </div>
+            ) : (
+              <div className="flex justify-between items-start">
+                <div>
+                  <span dangerouslySetInnerHTML={{ __html: c.question }} />
+                  <span className="text-sm text-gray-600 block" dangerouslySetInnerHTML={{ __html: c.answer }} />
+                </div>
+                <div className="flex gap-2">
+                  <button onClick={() => startEdit(c)} className="text-blue-600">Edit</button>
+                  <button onClick={() => remove(c.id)} className="text-red-600">X</button>
+                </div>
+              </div>
+            )}
           </li>
         ))}
       </ul>
