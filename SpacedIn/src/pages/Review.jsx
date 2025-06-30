@@ -10,10 +10,17 @@ export default function Review() {
   const [index, setIndex] = useState(0)
   const [showAnswer, setShowAnswer] = useState(false)
   const [reviewed, setReviewed] = useState(0)
+  const [totalCards, setTotalCards] = useState(0)
 
   useEffect(() => {
     if (user?.id) {
-      api.getDueCards(id, user.id).then(setCards).catch(console.error)
+      api
+        .getDueCards(id, user.id)
+        .then((data) => {
+          setCards(data)
+          setTotalCards(data.length)
+        })
+        .catch(console.error)
     }
   }, [id, user])
 
@@ -39,7 +46,17 @@ export default function Review() {
   return (
     <div className="p-4 space-y-4">
       <Link to={`/decks/${id}`} className="text-blue-600">Back</Link>
-      <div>Due: {cards.length - reviewed} | Reviewed: {reviewed}</div>
+      <div className="space-y-1">
+        <div className="w-full h-2 bg-gray-200 rounded">
+          <div
+            className="h-full bg-blue-600 rounded"
+            style={{ width: `${(reviewed / totalCards) * 100}%` }}
+          />
+        </div>
+        <div className="text-sm text-gray-700">
+          Reviewed {reviewed} / {totalCards} cards
+        </div>
+      </div>
       <div className="border p-4">
         <div dangerouslySetInnerHTML={{ __html: card.question }} />
         {showAnswer && (
