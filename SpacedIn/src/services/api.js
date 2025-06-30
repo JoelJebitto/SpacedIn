@@ -52,4 +52,7 @@ export const api = {
     request(`/api/cards/${cardId}/review?userId=${userId}&quality=${quality}`, {
       method: "POST",
     }),
+  getUserStats: (userId) => request(`/api/stats/user/${userId}`),
+  getDeckStats: (deckId, userId) =>
+    request(`/api/stats/deck/${deckId}?userId=${userId}`),
 };
