@@ -2,10 +2,13 @@ package com.joeljebitto.SpacedIn.controller;
 
 import com.joeljebitto.SpacedIn.dto.DeckDTO;
 import com.joeljebitto.SpacedIn.dto.DeckRequest;
+import com.joeljebitto.SpacedIn.dto.FlashcardDTO;
 import com.joeljebitto.SpacedIn.entity.Deck;
 import com.joeljebitto.SpacedIn.service.DeckService;
+import com.joeljebitto.SpacedIn.service.ProgressService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.util.stream.Collectors;
 
 import java.util.List;
 
@@ -13,9 +16,11 @@ import java.util.List;
 @RequestMapping("/api/decks")
 public class DeckController {
   private final DeckService deckService;
+  private final ProgressService progressService;
 
-  public DeckController(DeckService deckService) {
+  public DeckController(DeckService deckService, ProgressService progressService) {
     this.deckService = deckService;
+    this.progressService = progressService;
   }
 
   @PostMapping("/{userId}")
@@ -37,6 +42,14 @@ public class DeckController {
   public ResponseEntity<Void> deleteDeck(@PathVariable Long id) {
     deckService.deleteDeck(id);
     return ResponseEntity.ok().build();
+  }
+
+  @GetMapping("/{deckId}/due-cards")
+  public ResponseEntity<List<FlashcardDTO>> getDueCards(@PathVariable Long deckId, @RequestParam Long userId) {
+    return ResponseEntity.ok(progressService.getDueCards(deckId, userId)
+        .stream()
+        .map(FlashcardDTO::new)
+        .collect(Collectors.toList()));
   }
 
   @GetMapping("/share/{id}")
