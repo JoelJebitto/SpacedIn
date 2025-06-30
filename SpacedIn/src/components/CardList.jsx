@@ -16,6 +16,7 @@ export default function CardList({ deckId, onChange }) {
 
   const create = async (e) => {
     e.preventDefault()
+    if (!question.trim() || !answer.trim()) return
     const card = await api.createCard({ deckId, question, answer })
     setCards([...cards, card])
     setQuestion(''); setAnswer('')
@@ -49,7 +50,12 @@ export default function CardList({ deckId, onChange }) {
       <form onSubmit={create} className="space-y-2">
         <RichTextEditor value={question} onChange={setQuestion} placeholder="Question" />
         <RichTextEditor value={answer} onChange={setAnswer} placeholder="Answer" />
-        <button className="bg-green-600 text-white px-3 mt-2">Add</button>
+        <button
+          className="bg-green-600 text-white px-3 mt-2 disabled:opacity-50"
+          disabled={!question.trim() || !answer.trim()}
+        >
+          Add
+        </button>
       </form>
       <ul className="space-y-2">
         {cards.map(c => (

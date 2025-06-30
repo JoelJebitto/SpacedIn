@@ -30,6 +30,7 @@ export default function DeckList({ userId, onChange }) {
 
   const create = async (e) => {
     e.preventDefault();
+    if (!title.trim()) return;
     console.log(user.id);
     const deck = await api.createDeck(user.id, { title });
     setDecks([...decks, deck]);
@@ -63,7 +64,12 @@ export default function DeckList({ userId, onChange }) {
           placeholder="New Deck"
           className="border p-2"
         />
-        <button className="bg-green-600 text-white px-3">Add</button>
+        <button
+          className="bg-green-600 text-white px-3 disabled:opacity-50"
+          disabled={!title.trim()}
+        >
+          Add
+        </button>
       </form>
       <ul className="space-y-2">
         {decks.map((d) => (
