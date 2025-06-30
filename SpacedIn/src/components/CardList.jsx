@@ -36,6 +36,7 @@ export default function CardList({ deckId, onChange }) {
   }
 
   const save = async (id) => {
+    if (!editQuestion.trim() || !editAnswer.trim()) return
     const updated = await api.updateCard(id, {
       question: editQuestion,
       answer: editAnswer,
@@ -65,7 +66,13 @@ export default function CardList({ deckId, onChange }) {
                 <RichTextEditor value={editQuestion} onChange={setEditQuestion} />
                 <RichTextEditor value={editAnswer} onChange={setEditAnswer} />
                 <div className="flex gap-2">
-                  <button onClick={() => save(c.id)} className="text-green-600">Save</button>
+                  <button
+                    onClick={() => save(c.id)}
+                    className="text-green-600 disabled:opacity-50"
+                    disabled={!editQuestion.trim() || !editAnswer.trim()}
+                  >
+                    Save
+                  </button>
                   <button onClick={() => setEditingId(null)} className="text-gray-600">Cancel</button>
                 </div>
               </div>

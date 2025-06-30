@@ -50,6 +50,7 @@ export default function DeckList({ userId, onChange }) {
   };
 
   const save = async (id) => {
+    if (!editTitle.trim()) return;
     const updated = await api.updateDeck(id, { title: editTitle });
     setDecks(decks.map((d) => (d.id === id ? updated : d)));
     setEditingId(null);
@@ -81,7 +82,11 @@ export default function DeckList({ userId, onChange }) {
                   onChange={(e) => setEditTitle(e.target.value)}
                   className="border p-2 flex-1"
                 />
-                <button onClick={() => save(d.id)} className="text-green-600">
+                <button
+                  onClick={() => save(d.id)}
+                  className="text-green-600 disabled:opacity-50"
+                  disabled={!editTitle.trim()}
+                >
                   Save
                 </button>
                 <button
