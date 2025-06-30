@@ -46,22 +46,22 @@ export default function Review() {
   };
 
   return (
-    <div className="p-4 space-y-4 w-full">
+    <div className="p-4 space-y-4 w-full text-gray-100">
       <Link to={`/decks/${id}`} className="text-blue-600">
         Back
       </Link>
       <div className="space-y-1">
-        <div className="w-full h-2 bg-gray-200 rounded">
+        <div className="w-full h-2 bg-gray-700 rounded">
           <div
             className="h-full bg-blue-600 rounded"
             style={{ width: `${(reviewed / totalCards) * 100}%` }}
           />
         </div>
-        <div className="text-sm text-gray-700">
+        <div className="text-sm text-gray-300">
           Reviewed {reviewed} / {totalCards} cards
         </div>
       </div>
-      <div className="border p-4">
+      <div className="border border-gray-600 rounded p-4 bg-gray-800 shadow">
         <div dangerouslySetInnerHTML={{ __html: card.question }} />
         {showAnswer && (
           <div
@@ -73,7 +73,7 @@ export default function Review() {
       {showAnswer ? (
         <div className="flex gap-2">
           {[0, 1, 2, 3, 4, 5].map((n) => (
-            <button key={n} onClick={() => grade(n)} className="border px-2">
+            <button key={n} onClick={() => grade(n)} className="border rounded px-2">
               {n}
             </button>
           ))}
@@ -81,7 +81,7 @@ export default function Review() {
       ) : (
         <button
           onClick={() => setShowAnswer(true)}
-          className="bg-blue-600 text-white px-3"
+          className="bg-blue-600 text-white rounded px-3 py-2"
         >
           Show Answer
         </button>

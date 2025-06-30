@@ -36,7 +36,7 @@ export default function RichTextEditor({ value, onChange, placeholder }) {
   }
 
   return (
-    <div className="border p-2 min-h-[2.5rem]">
+    <div className="border border-gray-600 bg-gray-700 text-gray-100 p-2 min-h-[2.5rem]">
       <Editor
         editorState={editorState}
         onChange={handleChange}
