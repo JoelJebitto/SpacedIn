@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { api } from "../services/api";
 
 export default function Dashboard() {
-  const { token, logout, user } = useAuth();
+  const { token, user } = useAuth();
   const [stats, setStats] = useState(null);
 
   useEffect(() => {
@@ -17,9 +17,6 @@ export default function Dashboard() {
   if (!token) return <Navigate to="/" replace />;
   return (
     <div className="p-4 space-y-4 w-full">
-      <button onClick={logout} className="text-blue-600">
-        Logout
-      </button>
       {stats && (
         <div className="space-y-1">
           <div className="w-full h-2 bg-gray-200 rounded">
@@ -30,7 +27,7 @@ export default function Dashboard() {
               }}
             />
           </div>
-          <div className="text-sm text-gray-700">
+          <div className="text-sm text-gray-200">
             Reviewed {stats.reviewedCards} / {stats.totalCards} cards (Due{" "}
             {stats.dueCards})
           </div>

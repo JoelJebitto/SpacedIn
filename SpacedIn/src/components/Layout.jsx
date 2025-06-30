@@ -7,7 +7,7 @@ export default function Layout() {
       <div className="bg-white/90 absolute z-50 flex w-full left-1/2 transform -translate-x-1/2 ">
         <Header />
       </div>
-      <main className="flex mt-25 w-screen lg:w-[55rem] mx-auto">
+      <main className="flex mt-25 w-screen lg:w-[55rem] mx-auto bg-black/90 text-white">
         <Outlet />
       </main>
     </>

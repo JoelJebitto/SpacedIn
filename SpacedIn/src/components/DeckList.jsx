@@ -22,9 +22,7 @@ export default function DeckList({ userId }) {
       decks.forEach((d) => {
         api
           .getDeckStats(d.id, userId)
-          .then((s) =>
-            setStats((prev) => ({ ...prev, [d.id]: s }))
-          )
+          .then((s) => setStats((prev) => ({ ...prev, [d.id]: s })))
           .catch(console.error);
       });
     }
@@ -78,7 +76,10 @@ export default function DeckList({ userId }) {
                 <button onClick={() => save(d.id)} className="text-green-600">
                   Save
                 </button>
-                <button onClick={() => setEditingId(null)} className="text-gray-600">
+                <button
+                  onClick={() => setEditingId(null)}
+                  className="text-gray-200"
+                >
                   Cancel
                 </button>
               </div>
@@ -86,8 +87,15 @@ export default function DeckList({ userId }) {
               <div className="flex justify-between items-center">
                 <Link to={`/decks/${d.id}`}>{d.title}</Link>
                 <div className="flex gap-2">
-                  <button onClick={() => startEdit(d)} className="text-blue-600">Edit</button>
-                  <button onClick={() => remove(d.id)} className="text-red-600">X</button>
+                  <button
+                    onClick={() => startEdit(d)}
+                    className="text-blue-600"
+                  >
+                    Edit
+                  </button>
+                  <button onClick={() => remove(d.id)} className="text-red-600">
+                    X
+                  </button>
                 </div>
               </div>
             )}
@@ -96,11 +104,14 @@ export default function DeckList({ userId }) {
                 <div className="w-full h-2 bg-gray-200 rounded">
                   <div
                     className="h-full bg-blue-600 rounded"
-                    style={{ width: `${(stats[d.id].reviewedCards / stats[d.id].totalCards) * 100}%` }}
+                    style={{
+                      width: `${(stats[d.id].reviewedCards / stats[d.id].totalCards) * 100}%`,
+                    }}
                   />
                 </div>
                 <div className="text-xs text-gray-700">
-                  Reviewed {stats[d.id].reviewedCards} / {stats[d.id].totalCards} (Due {stats[d.id].dueCards})
+                  Reviewed {stats[d.id].reviewedCards} /{" "}
+                  {stats[d.id].totalCards} (Due {stats[d.id].dueCards})
                 </div>
               </div>
             )}
