@@ -1,6 +1,12 @@
 package com.joeljebitto.SpacedIn.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.joeljebitto.SpacedIn.entity.CardProgress;
 
 import jakarta.persistence.*;
 
@@ -15,6 +21,10 @@ public class Flashcard {
   @ManyToOne
   @JoinColumn(name = "deck_id")
   private Deck deck;
+
+  @JsonIgnore
+  @OneToMany(mappedBy = "card", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<CardProgress> progressRecords = new ArrayList<>();
 
   public Long getId() {
     return id;
@@ -46,5 +56,13 @@ public class Flashcard {
 
   public void setDeck(Deck deck) {
     this.deck = deck;
+  }
+
+  public List<CardProgress> getProgressRecords() {
+    return progressRecords;
+  }
+
+  public void setProgressRecords(List<CardProgress> progressRecords) {
+    this.progressRecords = progressRecords;
   }
 }
