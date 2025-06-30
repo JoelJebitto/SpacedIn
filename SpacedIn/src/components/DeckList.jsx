@@ -3,9 +3,10 @@ import useAuth from "../store/useAuth";
 import { api } from "../services/api";
 import { Link } from "react-router-dom";
 
-export default function DeckList() {
+export default function DeckList({ userId }) {
   const { user } = useAuth();
   const [decks, setDecks] = useState([]);
+  const [stats, setStats] = useState({});
   const [title, setTitle] = useState("");
   const [editingId, setEditingId] = useState(null);
   const [editTitle, setEditTitle] = useState("");
@@ -15,6 +16,19 @@ export default function DeckList() {
       api.getDecks(user.id).then(setDecks).catch(console.error);
     }
   }, [user]);
+
+  useEffect(() => {
+    if (userId && decks.length) {
+      decks.forEach((d) => {
+        api
+          .getDeckStats(d.id, userId)
+          .then((s) =>
+            setStats((prev) => ({ ...prev, [d.id]: s }))
+          )
+          .catch(console.error);
+      });
+    }
+  }, [decks, userId]);
 
   const create = async (e) => {
     e.preventDefault();
@@ -53,10 +67,7 @@ export default function DeckList() {
       </form>
       <ul className="space-y-2">
         {decks.map((d) => (
-          <li
-            key={d.id}
-            className="border p-2"
-          >
+          <li key={d.id} className="border p-2 space-y-1">
             {editingId === d.id ? (
               <div className="flex justify-between items-center gap-2">
                 <input
@@ -77,6 +88,19 @@ export default function DeckList() {
                 <div className="flex gap-2">
                   <button onClick={() => startEdit(d)} className="text-blue-600">Edit</button>
                   <button onClick={() => remove(d.id)} className="text-red-600">X</button>
+                </div>
+              </div>
+            )}
+            {stats[d.id] && (
+              <div className="space-y-1">
+                <div className="w-full h-2 bg-gray-200 rounded">
+                  <div
+                    className="h-full bg-blue-600 rounded"
+                    style={{ width: `${(stats[d.id].reviewedCards / stats[d.id].totalCards) * 100}%` }}
+                  />
+                </div>
+                <div className="text-xs text-gray-700">
+                  Reviewed {stats[d.id].reviewedCards} / {stats[d.id].totalCards} (Due {stats[d.id].dueCards})
                 </div>
               </div>
             )}
