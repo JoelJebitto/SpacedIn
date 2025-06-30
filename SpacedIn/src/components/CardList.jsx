@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { api } from '../services/api'
-import ReactQuill from 'react-quill'
-import 'react-quill/dist/quill.snow.css'
+import RichTextEditor from './RichTextEditor'
+
 
 export default function CardList({ deckId }) {
   const [cards, setCards] = useState([])
@@ -45,8 +45,8 @@ export default function CardList({ deckId }) {
   return (
     <div className="space-y-4">
       <form onSubmit={create} className="space-y-2">
-        <ReactQuill theme="snow" value={question} onChange={setQuestion} placeholder="Question" />
-        <ReactQuill theme="snow" value={answer} onChange={setAnswer} placeholder="Answer" />
+        <RichTextEditor value={question} onChange={setQuestion} placeholder="Question" />
+        <RichTextEditor value={answer} onChange={setAnswer} placeholder="Answer" />
         <button className="bg-green-600 text-white px-3 mt-2">Add</button>
       </form>
       <ul className="space-y-2">
@@ -54,8 +54,8 @@ export default function CardList({ deckId }) {
           <li key={c.id} className="border p-2">
             {editingId === c.id ? (
               <div className="space-y-2">
-                <ReactQuill theme="snow" value={editQuestion} onChange={setEditQuestion} />
-                <ReactQuill theme="snow" value={editAnswer} onChange={setEditAnswer} />
+                <RichTextEditor value={editQuestion} onChange={setEditQuestion} />
+                <RichTextEditor value={editAnswer} onChange={setEditAnswer} />
                 <div className="flex gap-2">
                   <button onClick={() => save(c.id)} className="text-green-600">Save</button>
                   <button onClick={() => setEditingId(null)} className="text-gray-600">Cancel</button>
