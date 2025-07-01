@@ -82,6 +82,7 @@ export default function CardList({ deckId, onChange }) {
                   setAnswer(liveRef.current.trim())
                 },
               )
+
               setStreamClose(() => {
                 close()
                 setIsStreaming(false)
