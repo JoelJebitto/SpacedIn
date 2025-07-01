@@ -57,11 +57,15 @@ export const api = {
     request(`/api/stats/deck/${deckId}?userId=${userId}`),
   generateAnswer: (question) =>
     request(`/api/ai/answer`, { method: "POST", body: JSON.stringify(question) }),
-  streamAnswer: (question, onMessage) => {
+  streamAnswer: (question, onMessage, onDone) => {
     const es = new EventSource(
       `${BASE}/api/ai/answer-stream?question=${encodeURIComponent(question)}`,
     );
     es.onmessage = (e) => onMessage(e.data);
+    es.onerror = () => {
+      es.close();
+      onDone && onDone();
+    };
     return () => es.close();
   },
 };
