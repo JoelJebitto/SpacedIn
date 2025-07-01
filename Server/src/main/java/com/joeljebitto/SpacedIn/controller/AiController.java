@@ -3,6 +3,7 @@ package com.joeljebitto.SpacedIn.controller;
 import com.joeljebitto.SpacedIn.service.AiService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @RestController
 @RequestMapping("/api/ai")
@@ -27,5 +28,15 @@ public class AiController {
     @PostMapping("/generate-cards")
     public ResponseEntity<String> generate(@RequestBody String topic) {
         return ResponseEntity.ok(aiService.generateCards(topic));
+    }
+
+    @PostMapping("/answer")
+    public ResponseEntity<String> answer(@RequestBody String question) {
+        return ResponseEntity.ok(aiService.generateAnswer(question));
+    }
+
+    @GetMapping(value = "/answer-stream", produces = "text/event-stream")
+    public SseEmitter answerStream(@RequestParam String question) {
+        return aiService.streamAnswer(question);
     }
 }
