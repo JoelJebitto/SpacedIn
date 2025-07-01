@@ -1,7 +1,8 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { api } from "../services/api";
 import RichTextEditor from "./RichTextEditor";
 import LiveThinkingBox from "./LiveThinkingBox";
+import useReasoningAnswerStream from "../hooks/useReasoningAnswerStream";
 
 export default function CardList({ deckId, onChange }) {
   const [cards, setCards] = useState([]);
@@ -11,9 +12,20 @@ export default function CardList({ deckId, onChange }) {
   const [editQuestion, setEditQuestion] = useState("");
   const [editAnswer, setEditAnswer] = useState("");
   const [streamClose, setStreamClose] = useState(null);
-  const [liveText, setLiveText] = useState("");
-  const liveRef = useRef("");
   const [isStreaming, setIsStreaming] = useState(false);
+  const {
+    streamText,
+    reasoningText,
+    answerText,
+    handleChunk,
+    handleEnd,
+    reset,
+  } = useReasoningAnswerStream();
+
+  // Update answer field when the streaming hook provides the final text
+  useEffect(() => {
+    if (answerText) setAnswer(answerText);
+  }, [answerText]);
 
   useEffect(() => {
     api.getCards(deckId).then(setCards).catch(console.error);
@@ -53,33 +65,17 @@ export default function CardList({ deckId, onChange }) {
   };
 
   const startStream = () => {
-    if (streamClose) streamClose(); // Close any existing stream
+    if (streamClose) streamClose(); // close any existing stream
 
+    reset();
+    setAnswer("");
     setIsStreaming(true);
-    setLiveText("");
-    liveRef.current = "";
 
-    const close = api.streamAnswer(
-      question,
-      (chunk) => {
-        setLiveText((prev) => {
-          const last = prev.slice(-1);
-          const spaced =
-            !last || /\s/.test(last) || /^\s/.test(chunk) ? chunk : " " + chunk;
-          const text = prev + spaced;
-          liveRef.current = text;
-          return text;
-        });
-      },
-      () => {
-        setIsStreaming(false);
-        setAnswer(liveRef.current.trim());
-        liveRef.current = ""; // ✅ Reset
-        setLiveText("");
-      },
-    );
+    const close = api.streamAnswer(question, handleChunk, () => {
+      handleEnd();
+      setIsStreaming(false);
+    });
 
-    // ✅ Properly store the stream closer
     setStreamClose(() => close);
   };
 
@@ -106,7 +102,12 @@ export default function CardList({ deckId, onChange }) {
             AI Generate
           </button>
         </div>
-        {isStreaming && <LiveThinkingBox text={liveText} />}
+        {isStreaming && <LiveThinkingBox text={streamText} />}
+        {!isStreaming && reasoningText && (
+          <div className="border border-gray-600 bg-gray-800 text-gray-100 p-2 whitespace-pre-wrap">
+            {reasoningText}
+          </div>
+        )}
         <button
           className="bg-green-600 text-white rounded px-3 mt-2 disabled:opacity-50"
           disabled={!question.trim() || !answer.trim() || isStreaming}

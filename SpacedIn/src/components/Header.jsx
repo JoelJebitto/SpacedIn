@@ -33,7 +33,10 @@ const Header = () => {
       </h1>
       <div className="flex gap-2">
         {token ? (
-          <Btn onClick={handleLogout}>Logout</Btn>
+          <>
+            <Btn onClick={() => navigate('/aidemo')}>AI Demo</Btn>
+            <Btn onClick={handleLogout}>Logout</Btn>
+          </>
         ) : (
           <>
             <Btn onClick={handleLogin}>Login</Btn>
