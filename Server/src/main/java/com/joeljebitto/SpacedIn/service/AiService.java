@@ -24,6 +24,10 @@ public class AiService {
   private final HttpClient httpClient = HttpClient.newHttpClient();
   private final ExecutorService executor = Executors.newCachedThreadPool();
 
+  private String shortPrompt(String q) {
+    return q + "\nRespond concisely.";
+  }
+
   public String explain(String question) {
     return "AI explanation for: " + question;
   }
@@ -42,7 +46,7 @@ public class AiService {
       try {
         Map<String, Object> msg = new HashMap<>();
         msg.put("role", "user");
-        msg.put("content", question);
+        msg.put("content", shortPrompt(question));
         Map<String, Object> body = new HashMap<>();
         body.put("model", "gpt-3.5-turbo");
         body.put("messages", java.util.List.of(msg));
@@ -63,7 +67,7 @@ public class AiService {
     }
 
     try {
-      return callLocalModel(question, false);
+      return callLocalModel(shortPrompt(question), false);
     } catch (Exception e) {
       e.printStackTrace();
       return "AI error: could not generate an answer.";
@@ -74,7 +78,7 @@ public class AiService {
     SseEmitter emitter = new SseEmitter();
     executor.submit(() -> {
       try {
-        callLocalModelStream(question, emitter);
+        callLocalModelStream(shortPrompt(question), emitter);
       } catch (Exception e) {
         emitter.completeWithError(e);
       }
@@ -82,10 +86,10 @@ public class AiService {
     return emitter;
   }
 
-  private String callLocalModel(String question, boolean stream) throws Exception {
+  private String callLocalModel(String prompt, boolean stream) throws Exception {
     Map<String, Object> body = new HashMap<>();
     body.put("model", "deepseek-r1:8b");
-    body.put("prompt", question);
+    body.put("prompt", prompt);
     body.put("stream", stream);
     String json = mapper.writeValueAsString(body);
     HttpRequest request = HttpRequest.newBuilder()
@@ -98,10 +102,10 @@ public class AiService {
     return node.path("response").asText().trim();
   }
 
-  private void callLocalModelStream(String question, SseEmitter emitter) throws Exception {
+  private void callLocalModelStream(String prompt, SseEmitter emitter) throws Exception {
     Map<String, Object> body = new HashMap<>();
     body.put("model", "deepseek-r1:8b");
-    body.put("prompt", question);
+    body.put("prompt", prompt);
     body.put("stream", true);
     String json = mapper.writeValueAsString(body);
     HttpRequest request = HttpRequest.newBuilder()
