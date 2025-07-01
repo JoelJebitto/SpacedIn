@@ -1,95 +1,107 @@
-import { useEffect, useState, useRef } from 'react'
-import { api } from '../services/api'
-import RichTextEditor from './RichTextEditor'
-import LiveThinkingBox from './LiveThinkingBox'
+import { useEffect, useState, useRef } from "react";
+import { api } from "../services/api";
+import RichTextEditor from "./RichTextEditor";
+import LiveThinkingBox from "./LiveThinkingBox";
 
 export default function CardList({ deckId, onChange }) {
-  const [cards, setCards] = useState([])
-  const [question, setQuestion] = useState('')
-  const [answer, setAnswer] = useState('')
-  const [editingId, setEditingId] = useState(null)
-  const [editQuestion, setEditQuestion] = useState('')
-  const [editAnswer, setEditAnswer] = useState('')
-  const [streamClose, setStreamClose] = useState(null)
-  const [liveText, setLiveText] = useState('')
-  const liveRef = useRef('')
-  const [isStreaming, setIsStreaming] = useState(false)
+  const [cards, setCards] = useState([]);
+  const [question, setQuestion] = useState("");
+  const [answer, setAnswer] = useState("");
+  const [editingId, setEditingId] = useState(null);
+  const [editQuestion, setEditQuestion] = useState("");
+  const [editAnswer, setEditAnswer] = useState("");
+  const [streamClose, setStreamClose] = useState(null);
+  const [liveText, setLiveText] = useState("");
+  const liveRef = useRef("");
+  const [isStreaming, setIsStreaming] = useState(false);
 
   useEffect(() => {
-    api.getCards(deckId).then(setCards).catch(console.error)
-  }, [deckId])
+    api.getCards(deckId).then(setCards).catch(console.error);
+  }, [deckId]);
 
   const create = async (e) => {
-    e.preventDefault()
-    if (!question.trim() || !answer.trim()) return
-    const card = await api.createCard({ deckId, question, answer })
-    setCards([...cards, card])
-    setQuestion(''); setAnswer('')
-    onChange && onChange()
-  }
+    e.preventDefault();
+    if (!question.trim() || !answer.trim() || isStreaming) return;
+    const card = await api.createCard({ deckId, question, answer });
+    setCards([...cards, card]);
+    setQuestion("");
+    setAnswer("");
+    onChange && onChange();
+  };
 
   const remove = async (id) => {
-    await api.deleteCard(id)
-    setCards(cards.filter(c => c.id !== id))
-    onChange && onChange()
-  }
+    await api.deleteCard(id);
+    setCards(cards.filter((c) => c.id !== id));
+    onChange && onChange();
+  };
 
   const startEdit = (c) => {
-    setEditingId(c.id)
-    setEditQuestion(c.question)
-    setEditAnswer(c.answer)
-  }
+    setEditingId(c.id);
+    setEditQuestion(c.question);
+    setEditAnswer(c.answer);
+  };
 
   const save = async (id) => {
-    if (!editQuestion.trim() || !editAnswer.trim()) return
+    if (!editQuestion.trim() || !editAnswer.trim()) return;
     const updated = await api.updateCard(id, {
       question: editQuestion,
       answer: editAnswer,
-    })
-    setCards(cards.map(c => (c.id === id ? updated : c)))
-    setEditingId(null)
-    onChange && onChange()
-  }
+    });
+    setCards(cards.map((c) => (c.id === id ? updated : c)));
+    setEditingId(null);
+    onChange && onChange();
+  };
+
+  const startStream = () => {
+    if (streamClose) streamClose(); // Close any existing stream
+
+    setIsStreaming(true);
+    setLiveText("");
+    liveRef.current = "";
+
+    const close = api.streamAnswer(
+      question,
+      (chunk) => {
+        setLiveText((prev) => {
+          const last = prev.slice(-1);
+          const spaced =
+            !last || /\s/.test(last) || /^\s/.test(chunk) ? chunk : " " + chunk;
+          const text = prev + spaced;
+          liveRef.current = text;
+          return text;
+        });
+      },
+      () => {
+        setIsStreaming(false);
+        setAnswer(liveRef.current.trim());
+        liveRef.current = ""; // ✅ Reset
+        setLiveText("");
+      },
+    );
+
+    // ✅ Properly store the stream closer
+    setStreamClose(() => close);
+  };
 
   return (
     <div className="space-y-4">
       <form onSubmit={create} className="space-y-2">
-        <RichTextEditor value={question} onChange={setQuestion} placeholder="Question" />
-        <RichTextEditor value={answer} onChange={setAnswer} placeholder="Answer" />
+        <RichTextEditor
+          value={question}
+          onChange={setQuestion}
+          placeholder="Question"
+        />
+        <RichTextEditor
+          value={answer}
+          onChange={setAnswer}
+          placeholder="Answer"
+        />
         <div className="flex gap-2">
           <button
             type="button"
-            onClick={() => {
-              if (streamClose) streamClose()
-              setAnswer('')
-              setLiveText('')
-              setIsStreaming(true)
-              const close = api.streamAnswer(
-                question,
-                (chunk) => {
-                  setLiveText((prev) => {
-                    const last = prev.slice(-1)
-                    const spaced = !last || /\s/.test(last) || /^\s/.test(chunk)
-                      ? chunk
-                      : ' ' + chunk
-                    const text = prev + spaced
-                    liveRef.current = text
-                    return text
-                  })
-                },
-                () => {
-                  setIsStreaming(false)
-                  setAnswer(liveRef.current.trim())
-                },
-              )
-
-              setStreamClose(() => {
-                close()
-                setIsStreaming(false)
-              })
-            }}
+            onClick={startStream}
             className="text-sm text-blue-400"
-            disabled={!question.trim()}
+            disabled={!question.trim() || isStreaming}
           >
             AI Generate
           </button>
@@ -97,17 +109,24 @@ export default function CardList({ deckId, onChange }) {
         {isStreaming && <LiveThinkingBox text={liveText} />}
         <button
           className="bg-green-600 text-white rounded px-3 mt-2 disabled:opacity-50"
-          disabled={!question.trim() || !answer.trim()}
+          disabled={!question.trim() || !answer.trim() || isStreaming}
         >
           Add
         </button>
       </form>
+
       <ul className="space-y-2">
-        {cards.map(c => (
-          <li key={c.id} className="border border-gray-600 rounded p-4 bg-gray-800 shadow">
+        {cards.map((c) => (
+          <li
+            key={c.id}
+            className="border border-gray-600 rounded p-4 bg-gray-800 shadow"
+          >
             {editingId === c.id ? (
               <div className="space-y-2">
-                <RichTextEditor value={editQuestion} onChange={setEditQuestion} />
+                <RichTextEditor
+                  value={editQuestion}
+                  onChange={setEditQuestion}
+                />
                 <RichTextEditor value={editAnswer} onChange={setEditAnswer} />
                 <div className="flex gap-2">
                   <button
@@ -123,14 +142,16 @@ export default function CardList({ deckId, onChange }) {
                   >
                     Cancel
                   </button>
-
                 </div>
               </div>
             ) : (
               <div className="flex justify-between items-start">
                 <div>
                   <span dangerouslySetInnerHTML={{ __html: c.question }} />
-                  <span className="text-sm text-gray-400 block" dangerouslySetInnerHTML={{ __html: c.answer }} />
+                  <span
+                    className="text-sm text-gray-400 block"
+                    dangerouslySetInnerHTML={{ __html: c.answer }}
+                  />
                 </div>
                 <div className="flex gap-2">
                   <button
@@ -149,5 +170,5 @@ export default function CardList({ deckId, onChange }) {
         ))}
       </ul>
     </div>
-  )
+  );
 }
