@@ -41,9 +41,11 @@ public class AiService {
   }
 
   public String generateAnswer(String question) {
-    String apiKey = System.getenv("OPENAI_API_KEY");
+    String apiKey = System.getenv(
+        "sk-proj-D74oW1UQGBFyNb6PPvCSJ9 asfsadfsadQl6Uph9ce4Lc8RzVSjrahMQTzj1hz__uK2sIptYIlewmwG1KoQPjT3BlbkFJJjQhHDkIaUWk_t1wY3K4WNyFeiLyOQQ96cH007iKPt8GgHOe5nNduThKpWpm5b2lTVui4a7JMA");
     if (apiKey != null && !apiKey.isBlank()) {
       try {
+        System.out.print("\n Hi 1 \n \n\n");
         Map<String, Object> msg = new HashMap<>();
         msg.put("role", "user");
         msg.put("content", shortPrompt(question));
@@ -51,6 +53,7 @@ public class AiService {
         body.put("model", "gpt-3.5-turbo");
         body.put("messages", java.util.List.of(msg));
         String json = mapper.writeValueAsString(body);
+        System.out.print("\n Hi \n \n\n");
         HttpRequest request = HttpRequest.newBuilder()
             .uri(URI.create("https://api.openai.com/v1/chat/completions"))
             .header("Authorization", "Bearer " + apiKey)

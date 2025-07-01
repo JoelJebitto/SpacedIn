@@ -14,7 +14,7 @@ export default function useDeepSeekStream() {
   const parse = useCallback(() => {
     const text = liveRef.current;
     const start = text.indexOf("<think>");
-    const end = text.indexOf("</think>");
+    const end = text.indexOf("\u003c/think\u003e");
 
     let reasoning = "";
     let answer = "";
@@ -66,5 +66,12 @@ export default function useDeepSeekStream() {
     setAnswerText("");
   }, []);
 
-  return { reasoningText, answerText, onStreamChunk, onStreamEnd, liveRef, reset };
+  return {
+    reasoningText,
+    answerText,
+    onStreamChunk,
+    onStreamEnd,
+    liveRef,
+    reset,
+  };
 }
