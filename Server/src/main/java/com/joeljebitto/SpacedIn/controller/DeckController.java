@@ -6,8 +6,6 @@ import com.joeljebitto.SpacedIn.dto.FlashcardDTO;
 import com.joeljebitto.SpacedIn.entity.Deck;
 import com.joeljebitto.SpacedIn.service.DeckService;
 import com.joeljebitto.SpacedIn.service.ProgressService;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.stream.Collectors;
@@ -17,7 +15,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/decks")
 public class DeckController {
-  @Autowired
   private final DeckService deckService;
   private final ProgressService progressService;
 
