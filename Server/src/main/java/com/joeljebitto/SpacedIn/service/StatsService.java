@@ -9,6 +9,7 @@ import com.joeljebitto.SpacedIn.repository.DeckRepository;
 import com.joeljebitto.SpacedIn.repository.FlashcardRepository;
 import com.joeljebitto.SpacedIn.repository.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -32,6 +33,7 @@ public class StatsService {
         this.progressService = progressService;
     }
 
+    @Transactional(readOnly = true)
     public StatsDTO getUserStats(Long userId) {
         User user = userRepository.findById(userId).orElseThrow();
         List<Deck> decks = deckRepository.findByOwnerId(userId);
@@ -45,6 +47,7 @@ public class StatsService {
         return new StatsDTO(totalCards, reviewed, due);
     }
 
+    @Transactional(readOnly = true)
     public StatsDTO getDeckStats(Long deckId, Long userId) {
         User user = userRepository.findById(userId).orElseThrow();
         List<Flashcard> cards = flashcardRepository.findByDeckId(deckId);
