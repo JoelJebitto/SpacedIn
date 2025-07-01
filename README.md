@@ -3,6 +3,12 @@
 SpacedIn is a spaced repetition web application powered by Spring Boot and React.
 It provides flashcards, deck management and AI-assisted learning.
 
+## OpenAI API Key
+
+Place your OpenAI API key in a file named `openai_api_key.txt` at the repository
+root. The backend will read this file to use the ChatGPT API. If the file is
+missing or blank, the application falls back to a local model.
+
 ## Requirements
 - Java 21
 - Node 18+
