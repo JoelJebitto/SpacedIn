@@ -93,6 +93,7 @@ public class AiService {
     executor.submit(() -> {
       try {
         String apiKey = loadApiKey();
+        System.out.println(apiKey);
         if (apiKey != null && !apiKey.isBlank()) {
           callOpenAiStream(shortPrompt(question), emitter, apiKey);
         } else {
