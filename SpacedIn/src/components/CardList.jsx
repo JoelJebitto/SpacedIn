@@ -9,6 +9,7 @@ export default function CardList({ deckId, onChange }) {
   const [editingId, setEditingId] = useState(null)
   const [editQuestion, setEditQuestion] = useState('')
   const [editAnswer, setEditAnswer] = useState('')
+  const [streamClose, setStreamClose] = useState(null)
 
   useEffect(() => {
     api.getCards(deckId).then(setCards).catch(console.error)
@@ -51,6 +52,23 @@ export default function CardList({ deckId, onChange }) {
       <form onSubmit={create} className="space-y-2">
         <RichTextEditor value={question} onChange={setQuestion} placeholder="Question" />
         <RichTextEditor value={answer} onChange={setAnswer} placeholder="Answer" />
+        <div className="flex gap-2">
+          <button
+            type="button"
+            onClick={() => {
+              if (streamClose) streamClose()
+              setAnswer('')
+              const close = api.streamAnswer(question, chunk => {
+                setAnswer(prev => prev + chunk)
+              })
+              setStreamClose(() => close)
+            }}
+            className="text-sm text-blue-400"
+            disabled={!question.trim()}
+          >
+            AI Generate
+          </button>
+        </div>
         <button
           className="bg-green-600 text-white rounded px-3 mt-2 disabled:opacity-50"
           disabled={!question.trim() || !answer.trim()}
