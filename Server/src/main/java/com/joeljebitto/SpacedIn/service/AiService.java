@@ -15,6 +15,8 @@ import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -40,12 +42,22 @@ public class AiService {
     return "Generated cards for " + topic;
   }
 
+  private String loadApiKey() {
+    String envKey = System.getenv("OPENAI_API_KEY");
+    if (envKey != null && !envKey.isBlank()) {
+      return envKey;
+    }
+    try {
+      return Files.readString(Path.of("openai_api_key.txt")).trim();
+    } catch (Exception e) {
+      return null;
+    }
+  }
+
   public String generateAnswer(String question) {
-    String apiKey = System.getenv(
-        "sk-proj-D74oW1UQGBFyNb6PPvCSJ9 asfsadfsadQl6Uph9ce4Lc8RzVSjrahMQTzj1hz__uK2sIptYIlewmwG1KoQPjT3BlbkFJJjQhHDkIaUWk_t1wY3K4WNyFeiLyOQQ96cH007iKPt8GgHOe5nNduThKpWpm5b2lTVui4a7JMA");
+    String apiKey = loadApiKey();
     if (apiKey != null && !apiKey.isBlank()) {
       try {
-        System.out.print("\n Hi 1 \n \n\n");
         Map<String, Object> msg = new HashMap<>();
         msg.put("role", "user");
         msg.put("content", shortPrompt(question));
@@ -53,7 +65,6 @@ public class AiService {
         body.put("model", "gpt-3.5-turbo");
         body.put("messages", java.util.List.of(msg));
         String json = mapper.writeValueAsString(body);
-        System.out.print("\n Hi \n \n\n");
         HttpRequest request = HttpRequest.newBuilder()
             .uri(URI.create("https://api.openai.com/v1/chat/completions"))
             .header("Authorization", "Bearer " + apiKey)
@@ -81,7 +92,12 @@ public class AiService {
     SseEmitter emitter = new SseEmitter();
     executor.submit(() -> {
       try {
-        callLocalModelStream(shortPrompt(question), emitter);
+        String apiKey = loadApiKey();
+        if (apiKey != null && !apiKey.isBlank()) {
+          callOpenAiStream(shortPrompt(question), emitter, apiKey);
+        } else {
+          callLocalModelStream(shortPrompt(question), emitter);
+        }
       } catch (Exception e) {
         emitter.completeWithError(e);
       }
@@ -125,6 +141,40 @@ public class AiService {
         JsonNode node = mapper.readTree(line);
         String token = node.path("response").asText();
         emitter.send(token);
+      }
+    }
+    emitter.complete();
+  }
+
+  private void callOpenAiStream(String prompt, SseEmitter emitter, String apiKey) throws Exception {
+    Map<String, Object> msg = new HashMap<>();
+    msg.put("role", "user");
+    msg.put("content", prompt);
+    Map<String, Object> body = new HashMap<>();
+    body.put("model", "gpt-3.5-turbo");
+    body.put("messages", java.util.List.of(msg));
+    body.put("stream", true);
+    String json = mapper.writeValueAsString(body);
+    HttpRequest request = HttpRequest.newBuilder()
+        .uri(URI.create("https://api.openai.com/v1/chat/completions"))
+        .header("Authorization", "Bearer " + apiKey)
+        .header("Content-Type", "application/json")
+        .POST(HttpRequest.BodyPublishers.ofString(json))
+        .build();
+    HttpResponse<java.io.InputStream> response = httpClient.send(request, HttpResponse.BodyHandlers.ofInputStream());
+    try (BufferedReader reader = new BufferedReader(new InputStreamReader(response.body(), StandardCharsets.UTF_8))) {
+      String line;
+      while ((line = reader.readLine()) != null) {
+        if (!line.startsWith("data:"))
+          continue;
+        String data = line.substring(5).trim();
+        if (data.equals("[DONE]"))
+          break;
+        JsonNode node = mapper.readTree(data);
+        String token = node.path("choices").get(0).path("delta").path("content").asText();
+        if (!token.isEmpty()) {
+          emitter.send(token);
+        }
       }
     }
     emitter.complete();
