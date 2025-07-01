@@ -4,6 +4,7 @@ import Register from "./pages/Register.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import Deck from "./pages/Deck.jsx";
 import Review from "./pages/Review.jsx";
+import AIDemo from "./pages/AIDemo.jsx";
 import Layout from "./components/Layout.jsx";
 
 export default function Router() {
@@ -16,6 +17,7 @@ export default function Router() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/decks/:id" element={<Deck />} />
           <Route path="/decks/:id/review" element={<Review />} />
+          <Route path="/aidemo" element={<AIDemo />} />
         </Route>
       </Routes>
     </BrowserRouter>
