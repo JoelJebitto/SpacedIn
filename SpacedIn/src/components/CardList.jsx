@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { api } from '../services/api'
 import RichTextEditor from './RichTextEditor'
+import LiveThinkingBox from './LiveThinkingBox'
 
 export default function CardList({ deckId, onChange }) {
   const [cards, setCards] = useState([])
@@ -10,6 +11,9 @@ export default function CardList({ deckId, onChange }) {
   const [editQuestion, setEditQuestion] = useState('')
   const [editAnswer, setEditAnswer] = useState('')
   const [streamClose, setStreamClose] = useState(null)
+  const [liveText, setLiveText] = useState('')
+  const liveRef = useRef('')
+  const [isStreaming, setIsStreaming] = useState(false)
 
   useEffect(() => {
     api.getCards(deckId).then(setCards).catch(console.error)
@@ -58,10 +62,30 @@ export default function CardList({ deckId, onChange }) {
             onClick={() => {
               if (streamClose) streamClose()
               setAnswer('')
-              const close = api.streamAnswer(question, chunk => {
-                setAnswer(prev => prev + chunk)
+              setLiveText('')
+              setIsStreaming(true)
+              const close = api.streamAnswer(
+                question,
+                (chunk) => {
+                  setLiveText((prev) => {
+                    const last = prev.slice(-1)
+                    const spaced = !last || /\s/.test(last) || /^\s/.test(chunk)
+                      ? chunk
+                      : ' ' + chunk
+                    const text = prev + spaced
+                    liveRef.current = text
+                    return text
+                  })
+                },
+                () => {
+                  setIsStreaming(false)
+                  setAnswer(liveRef.current.trim())
+                },
+              )
+              setStreamClose(() => {
+                close()
+                setIsStreaming(false)
               })
-              setStreamClose(() => close)
             }}
             className="text-sm text-blue-400"
             disabled={!question.trim()}
@@ -69,6 +93,7 @@ export default function CardList({ deckId, onChange }) {
             AI Generate
           </button>
         </div>
+        {isStreaming && <LiveThinkingBox text={liveText} />}
         <button
           className="bg-green-600 text-white rounded px-3 mt-2 disabled:opacity-50"
           disabled={!question.trim() || !answer.trim()}
