@@ -7,6 +7,7 @@ import com.joeljebitto.SpacedIn.entity.Flashcard;
 import com.joeljebitto.SpacedIn.repository.DeckRepository;
 import com.joeljebitto.SpacedIn.repository.FlashcardRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -45,6 +46,7 @@ public class FlashcardService {
     flashcardRepository.deleteById(id);
   }
 
+  @Transactional(readOnly = true)
   public List<FlashcardDTO> getDeckCards(Long deckId) {
     return flashcardRepository.findByDeckId(deckId)
         .stream()
