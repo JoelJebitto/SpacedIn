@@ -55,56 +55,80 @@ public class AiService {
     }
   }
 
-  public String generateAnswer(String question) {
+  public String generateAnswer(String question, String engine) {
     String apiKey = loadApiKey();
-    if (apiKey != null && !apiKey.isBlank()) {
-      try {
-        Map<String, Object> msg = new HashMap<>();
-        msg.put("role", "user");
-        msg.put("content", shortPrompt(question));
-        Map<String, Object> body = new HashMap<>();
-        body.put("model", "gpt-3.5-turbo");
-        body.put("messages", java.util.List.of(msg));
-        String json = mapper.writeValueAsString(body);
-        HttpRequest request = HttpRequest.newBuilder()
-            .uri(URI.create("https://api.openai.com/v1/chat/completions"))
-            .header("Authorization", "Bearer " + apiKey)
-            .header("Content-Type", "application/json")
-            .timeout(Duration.ofSeconds(30))
-            .POST(HttpRequest.BodyPublishers.ofString(json))
-            .build();
-        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-        JsonNode node = mapper.readTree(response.body());
-        return node.get("choices").get(0).get("message").get("content").asText().trim();
-      } catch (Exception e) {
-        // fall back to local model on error
-      }
-    }
+    String prompt = shortPrompt(question);
+
+    String mode = engine == null ? "auto" : engine.toLowerCase();
 
     try {
-      return callLocalModel(shortPrompt(question), false);
+      if ("deepseek".equals(mode)) {
+        return callLocalModel(prompt, false);
+      }
+
+      if ("chatgpt".equals(mode) || "auto".equals(mode)) {
+        if (apiKey != null && !apiKey.isBlank()) {
+          try {
+            return callOpenAi(prompt, apiKey);
+          } catch (Exception e) {
+            if (!"auto".equals(mode)) {
+              throw e;
+            }
+          }
+        }
+      }
+      // fallback to local model when auto and openai fails or api key missing
+      return callLocalModel(prompt, false);
     } catch (Exception e) {
       e.printStackTrace();
       return "AI error: could not generate an answer.";
     }
   }
 
-  public SseEmitter streamAnswer(String question) {
+  public SseEmitter streamAnswer(String question, String engine) {
     SseEmitter emitter = new SseEmitter();
     executor.submit(() -> {
       try {
         String apiKey = loadApiKey();
-        System.out.println(apiKey);
-        try {
-          callOpenAiStream(shortPrompt(question), emitter, apiKey);
-        } catch (Exception e) {
-          callLocalModelStream(shortPrompt(question), emitter);
+        String prompt = shortPrompt(question);
+        String mode = engine == null ? "auto" : engine.toLowerCase();
+
+        if ("deepseek".equals(mode)) {
+          callLocalModelStream(prompt, emitter);
+        } else if ("chatgpt".equals(mode)) {
+          callOpenAiStream(prompt, emitter, apiKey);
+        } else {
+          try {
+            callOpenAiStream(prompt, emitter, apiKey);
+          } catch (Exception e) {
+            callLocalModelStream(prompt, emitter);
+          }
         }
       } catch (Exception e) {
         emitter.completeWithError(e);
       }
     });
     return emitter;
+  }
+
+  private String callOpenAi(String prompt, String apiKey) throws Exception {
+    Map<String, Object> msg = new HashMap<>();
+    msg.put("role", "user");
+    msg.put("content", prompt);
+    Map<String, Object> body = new HashMap<>();
+    body.put("model", "gpt-3.5-turbo");
+    body.put("messages", java.util.List.of(msg));
+    String json = mapper.writeValueAsString(body);
+    HttpRequest request = HttpRequest.newBuilder()
+        .uri(URI.create("https://api.openai.com/v1/chat/completions"))
+        .header("Authorization", "Bearer " + apiKey)
+        .header("Content-Type", "application/json")
+        .timeout(Duration.ofSeconds(30))
+        .POST(HttpRequest.BodyPublishers.ofString(json))
+        .build();
+    HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+    JsonNode node = mapper.readTree(response.body());
+    return node.get("choices").get(0).get("message").get("content").asText().trim();
   }
 
   private String callLocalModel(String prompt, boolean stream) throws Exception {
