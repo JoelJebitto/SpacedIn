@@ -1,5 +1,6 @@
 package com.joeljebitto.SpacedIn.controller;
 
+import com.joeljebitto.SpacedIn.dto.CardProgressDTO;
 import com.joeljebitto.SpacedIn.entity.CardProgress;
 import com.joeljebitto.SpacedIn.service.ProgressService;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,8 @@ public class ReviewController {
     }
 
     @PostMapping("/cards/{cardId}/review")
-    public ResponseEntity<CardProgress> review(@PathVariable Long cardId, @RequestParam Long userId, @RequestParam int quality) {
-        return ResponseEntity.ok(progressService.reviewCard(userId, cardId, quality));
+    public ResponseEntity<CardProgressDTO> review(@PathVariable Long cardId, @RequestParam Long userId, @RequestParam int quality) {
+        CardProgress progress = progressService.reviewCard(userId, cardId, quality);
+        return ResponseEntity.ok(new CardProgressDTO(progress));
     }
 }
