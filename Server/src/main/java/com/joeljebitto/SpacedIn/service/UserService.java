@@ -1,5 +1,6 @@
 package com.joeljebitto.SpacedIn.service;
 
+import com.joeljebitto.SpacedIn.dto.UserDTO;
 import com.joeljebitto.SpacedIn.entity.User;
 import com.joeljebitto.SpacedIn.repository.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -19,11 +20,11 @@ public class UserService {
         return userRepository.findById(id).orElseThrow();
     }
 
-    public User updateUser(Long id, User userData) {
+    public UserDTO updateUser(Long id, UserDTO userData) {
         User user = getUser(id);
         user.setEmail(userData.getEmail());
         user.setUsername(userData.getUsername());
-        return userRepository.save(user);
+        return new UserDTO(userRepository.save(user));
     }
 
     public void changePassword(Long id, String newPassword) {
