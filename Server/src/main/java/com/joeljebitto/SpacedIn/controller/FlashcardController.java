@@ -2,7 +2,6 @@ package com.joeljebitto.SpacedIn.controller;
 
 import com.joeljebitto.SpacedIn.dto.FlashcardDTO;
 import com.joeljebitto.SpacedIn.dto.FlashcardRequest;
-import com.joeljebitto.SpacedIn.entity.Flashcard;
 import com.joeljebitto.SpacedIn.service.FlashcardService;
 
 import org.springframework.http.ResponseEntity;
@@ -20,12 +19,12 @@ public class FlashcardController {
   }
 
   @PostMapping("/cards")
-  public ResponseEntity<Flashcard> create(@RequestBody FlashcardRequest req) {
+  public ResponseEntity<FlashcardDTO> create(@RequestBody FlashcardRequest req) {
     return ResponseEntity.ok(flashcardService.createCard(req));
   }
 
   @PutMapping("/cards/{id}")
-  public ResponseEntity<Flashcard> update(@PathVariable Long id, @RequestBody FlashcardRequest req) {
+  public ResponseEntity<FlashcardDTO> update(@PathVariable Long id, @RequestBody FlashcardRequest req) {
     return ResponseEntity.ok(flashcardService.updateCard(id, req));
   }
 
