@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.BufferedReader;
+import java.io.Console;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -94,9 +95,9 @@ public class AiService {
       try {
         String apiKey = loadApiKey();
         System.out.println(apiKey);
-        if (apiKey != null && !apiKey.isBlank()) {
+        try {
           callOpenAiStream(shortPrompt(question), emitter, apiKey);
-        } else {
+        } catch (Exception e) {
           callLocalModelStream(shortPrompt(question), emitter);
         }
       } catch (Exception e) {
@@ -123,6 +124,7 @@ public class AiService {
   }
 
   private void callLocalModelStream(String prompt, SseEmitter emitter) throws Exception {
+    System.out.println("hi");
     Map<String, Object> body = new HashMap<>();
     body.put("model", "deepseek-r1:8b");
     body.put("prompt", prompt);
