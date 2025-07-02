@@ -3,7 +3,6 @@ package com.joeljebitto.SpacedIn.controller;
 import com.joeljebitto.SpacedIn.dto.DeckDTO;
 import com.joeljebitto.SpacedIn.dto.DeckRequest;
 import com.joeljebitto.SpacedIn.dto.FlashcardDTO;
-import com.joeljebitto.SpacedIn.entity.Deck;
 import com.joeljebitto.SpacedIn.service.DeckService;
 import com.joeljebitto.SpacedIn.service.ProgressService;
 import org.springframework.http.ResponseEntity;
@@ -24,8 +23,8 @@ public class DeckController {
   }
 
   @PostMapping("/{userId}")
-  public ResponseEntity<Deck> createDeck(@PathVariable Long userId, @RequestBody DeckRequest request) {
-    return ResponseEntity.ok(deckService.createDeck(userId, request));
+  public ResponseEntity<DeckDTO> createDeck(@PathVariable Long userId, @RequestBody DeckRequest request) {
+    return ResponseEntity.ok(new DeckDTO(deckService.createDeck(userId, request)));
   }
 
   @GetMapping("/user/{userId}")
@@ -34,8 +33,8 @@ public class DeckController {
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<Deck> updateDeck(@PathVariable Long id, @RequestBody DeckRequest request) {
-    return ResponseEntity.ok(deckService.updateDeck(id, request));
+  public ResponseEntity<DeckDTO> updateDeck(@PathVariable Long id, @RequestBody DeckRequest request) {
+    return ResponseEntity.ok(new DeckDTO(deckService.updateDeck(id, request)));
   }
 
   @DeleteMapping("/{id}")
@@ -53,7 +52,7 @@ public class DeckController {
   }
 
   @GetMapping("/share/{id}")
-  public ResponseEntity<Deck> shareDeck(@PathVariable Long id) {
-    return ResponseEntity.ok(deckService.getDeck(id));
+  public ResponseEntity<DeckDTO> shareDeck(@PathVariable Long id) {
+    return ResponseEntity.ok(new DeckDTO(deckService.getDeck(id)));
   }
 }

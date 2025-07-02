@@ -1,6 +1,6 @@
 package com.joeljebitto.SpacedIn.controller;
 
-import com.joeljebitto.SpacedIn.entity.User;
+import com.joeljebitto.SpacedIn.dto.UserDTO;
 import com.joeljebitto.SpacedIn.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,12 +15,12 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> get(@PathVariable Long id) {
-        return ResponseEntity.ok(userService.getUser(id));
+    public ResponseEntity<UserDTO> get(@PathVariable Long id) {
+        return ResponseEntity.ok(new UserDTO(userService.getUser(id)));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> update(@PathVariable Long id, @RequestBody User user) {
+    public ResponseEntity<UserDTO> update(@PathVariable Long id, @RequestBody UserDTO user) {
         return ResponseEntity.ok(userService.updateUser(id, user));
     }
 
