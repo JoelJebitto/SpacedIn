@@ -58,7 +58,7 @@ export default function CardList({ deckId, onChange }) {
     onChange && onChange();
   };
 
-  const startStream = () => {
+  const startStream = (engine) => {
     if (streamClose) streamClose(); // Close any existing stream
 
     setIsStreaming(true);
@@ -77,6 +77,7 @@ export default function CardList({ deckId, onChange }) {
         setIsStreaming(false);
         setAnswer(answer.trim());
       },
+      engine,
     );
 
     // ✅ Properly store the stream closer
@@ -99,11 +100,19 @@ export default function CardList({ deckId, onChange }) {
         <div className="flex gap-2">
           <button
             type="button"
-            onClick={startStream}
+            onClick={() => startStream("chatgpt")}
             className="text-sm text-blue-400"
             disabled={!question.trim() || isStreaming}
           >
-            AI Generate
+            ChatGPT
+          </button>
+          <button
+            type="button"
+            onClick={() => startStream("deepseek")}
+            className="text-sm text-purple-400"
+            disabled={!question.trim() || isStreaming}
+          >
+            DeepSeek
           </button>
         </div>
         {isStreaming && <LiveThinkingBox text={reasoningText} />}

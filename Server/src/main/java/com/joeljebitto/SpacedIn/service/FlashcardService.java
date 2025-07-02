@@ -22,16 +22,19 @@ public class FlashcardService {
     this.deckRepository = deckRepository;
   }
 
-  public Flashcard createCard(FlashcardRequest request) {
+  @Transactional
+  public FlashcardDTO createCard(FlashcardRequest request) {
     Deck deck = deckRepository.findById(request.getDeckId()).orElseThrow();
     Flashcard card = new Flashcard();
     card.setDeck(deck);
     card.setQuestion(request.getQuestion());
     card.setAnswer(request.getAnswer());
-    return flashcardRepository.save(card);
+    Flashcard saved = flashcardRepository.save(card);
+    return new FlashcardDTO(saved);
   }
 
-  public Flashcard updateCard(Long id, FlashcardRequest request) {
+  @Transactional
+  public FlashcardDTO updateCard(Long id, FlashcardRequest request) {
     Flashcard card = flashcardRepository.findById(id).orElseThrow();
     card.setQuestion(request.getQuestion());
     card.setAnswer(request.getAnswer());
@@ -39,7 +42,8 @@ public class FlashcardService {
       Deck deck = deckRepository.findById(request.getDeckId()).orElseThrow();
       card.setDeck(deck);
     }
-    return flashcardRepository.save(card);
+    Flashcard saved = flashcardRepository.save(card);
+    return new FlashcardDTO(saved);
   }
 
   public void deleteCard(Long id) {
