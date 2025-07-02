@@ -55,11 +55,16 @@ export const api = {
   getUserStats: (userId) => request(`/api/stats/user/${userId}`),
   getDeckStats: (deckId, userId) =>
     request(`/api/stats/deck/${deckId}?userId=${userId}`),
-  generateAnswer: (question) =>
-    request(`/api/ai/answer`, { method: "POST", body: JSON.stringify(question) }),
-  streamAnswer: (question, onMessage, onDone) => {
+  generateAnswer: (question, engine = "auto") =>
+    request(`/api/ai/answer?engine=${engine}`, {
+      method: "POST",
+      body: JSON.stringify(question),
+    }),
+  streamAnswer: (question, onMessage, onDone, engine = "auto") => {
     const es = new EventSource(
-      `${BASE}/api/ai/answer-stream?question=${encodeURIComponent(question)}`,
+      `${BASE}/api/ai/answer-stream?question=${encodeURIComponent(
+        question,
+      )}&engine=${engine}`,
     );
     es.onmessage = (e) => onMessage(e.data);
     es.onerror = () => {

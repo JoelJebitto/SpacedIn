@@ -31,12 +31,14 @@ public class AiController {
     }
 
     @PostMapping("/answer")
-    public ResponseEntity<String> answer(@RequestBody String question) {
-        return ResponseEntity.ok(aiService.generateAnswer(question));
+    public ResponseEntity<String> answer(@RequestParam(required = false) String engine,
+                                         @RequestBody String question) {
+        return ResponseEntity.ok(aiService.generateAnswer(question, engine));
     }
 
     @GetMapping(value = "/answer-stream", produces = "text/event-stream")
-    public SseEmitter answerStream(@RequestParam String question) {
-        return aiService.streamAnswer(question);
+    public SseEmitter answerStream(@RequestParam String question,
+                                   @RequestParam(required = false) String engine) {
+        return aiService.streamAnswer(question, engine);
     }
 }
