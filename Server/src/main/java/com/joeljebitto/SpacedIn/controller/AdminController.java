@@ -1,5 +1,6 @@
 package com.joeljebitto.SpacedIn.controller;
 
+import com.joeljebitto.SpacedIn.dto.UserDTO;
 import com.joeljebitto.SpacedIn.entity.User;
 import com.joeljebitto.SpacedIn.repository.UserRepository;
 import com.joeljebitto.SpacedIn.service.AdminService;
@@ -20,8 +21,11 @@ public class AdminController {
     }
 
     @GetMapping("/users")
-    public ResponseEntity<List<User>> getUsers() {
-        return ResponseEntity.ok(userRepository.findAll());
+    public ResponseEntity<List<UserDTO>> getUsers() {
+        List<UserDTO> users = userRepository.findAll().stream()
+                .map(UserDTO::new)
+                .toList();
+        return ResponseEntity.ok(users);
     }
 
     @DeleteMapping("/deck/{id}")

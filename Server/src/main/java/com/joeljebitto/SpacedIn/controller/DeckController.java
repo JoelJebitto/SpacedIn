@@ -24,8 +24,9 @@ public class DeckController {
   }
 
   @PostMapping("/{userId}")
-  public ResponseEntity<Deck> createDeck(@PathVariable Long userId, @RequestBody DeckRequest request) {
-    return ResponseEntity.ok(deckService.createDeck(userId, request));
+  public ResponseEntity<DeckDTO> createDeck(@PathVariable Long userId, @RequestBody DeckRequest request) {
+    Deck deck = deckService.createDeck(userId, request);
+    return ResponseEntity.ok(new DeckDTO(deck));
   }
 
   @GetMapping("/user/{userId}")
@@ -34,8 +35,9 @@ public class DeckController {
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<Deck> updateDeck(@PathVariable Long id, @RequestBody DeckRequest request) {
-    return ResponseEntity.ok(deckService.updateDeck(id, request));
+  public ResponseEntity<DeckDTO> updateDeck(@PathVariable Long id, @RequestBody DeckRequest request) {
+    Deck deck = deckService.updateDeck(id, request);
+    return ResponseEntity.ok(new DeckDTO(deck));
   }
 
   @DeleteMapping("/{id}")
@@ -53,7 +55,8 @@ public class DeckController {
   }
 
   @GetMapping("/share/{id}")
-  public ResponseEntity<Deck> shareDeck(@PathVariable Long id) {
-    return ResponseEntity.ok(deckService.getDeck(id));
+  public ResponseEntity<DeckDTO> shareDeck(@PathVariable Long id) {
+    Deck deck = deckService.getDeck(id);
+    return ResponseEntity.ok(new DeckDTO(deck));
   }
 }
