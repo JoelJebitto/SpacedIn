@@ -1,7 +1,6 @@
 package com.joeljebitto.SpacedIn.controller;
 
 import com.joeljebitto.SpacedIn.dto.UserDTO;
-import com.joeljebitto.SpacedIn.entity.User;
 import com.joeljebitto.SpacedIn.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,11 +21,7 @@ public class UserController {
 
     @PutMapping("/{id}")
     public ResponseEntity<UserDTO> update(@PathVariable Long id, @RequestBody UserDTO user) {
-        User entity = new User();
-        entity.setEmail(user.getEmail());
-        entity.setUsername(user.getUsername());
-        User updated = userService.updateUser(id, entity);
-        return ResponseEntity.ok(new UserDTO(updated));
+        return ResponseEntity.ok(userService.updateUser(id, user));
     }
 
     @PostMapping("/change-password")
