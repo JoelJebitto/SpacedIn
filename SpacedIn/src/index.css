@@ -4,6 +4,15 @@
     @apply transition-all duration-300 ease-in-out;
   }
 }
+@layer utilities {
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+}
 
 input:-webkit-autofill {
   box-shadow: 0 0 0 1000px rgba(0, 0, 0, 0.9) inset !important;

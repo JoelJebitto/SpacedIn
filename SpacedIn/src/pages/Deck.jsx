@@ -19,11 +19,14 @@ export default function Deck() {
     refreshStats();
   }, [refreshStats]);
 
+  console.log(stats);
+
   return (
     <div className="p-4 space-y-4 w-full text-gray-100">
       <Link to="/dashboard" className="text-blue-600">
         Back
       </Link>
+
       {stats && (
         <div className="space-y-1">
           <div className="w-full h-2 bg-gray-700 rounded">
