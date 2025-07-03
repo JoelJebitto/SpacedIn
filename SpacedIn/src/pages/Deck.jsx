@@ -70,7 +70,6 @@ export default function Deck() {
       >
         Study
       </Link>
-      <br />
 
       <CardList deckId={id} onChange={refreshStats} />
     </div>

@@ -26,8 +26,22 @@ export default function Review() {
 
   if (!cards.length) {
     return (
-      <div className="p-4 space-y-2">
-        <Link to={`/decks/${id}`} className="text-blue-600">
+      <div className="p-4 space-y-2 text-gray-200">
+        <Link to={`/decks/${id}`} className="text-blue-600 flex gap-2">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="size-6"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M6.75 15.75 3 12m0 0 3.75-3.75M3 12h18"
+            />
+          </svg>
           Back
         </Link>
         <p>No cards due.</p>
@@ -47,7 +61,21 @@ export default function Review() {
 
   return (
     <div className="p-4 space-y-4 w-full text-gray-100">
-      <Link to={`/decks/${id}`} className="text-blue-600">
+      <Link to={`/decks/${id}`} className="text-blue-600 flex gap-2">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+          stroke="currentColor"
+          className="size-6"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M6.75 15.75 3 12m0 0 3.75-3.75M3 12h18"
+          />
+        </svg>
         Back
       </Link>
       <div className="space-y-1">
@@ -73,7 +101,11 @@ export default function Review() {
       {showAnswer ? (
         <div className="flex gap-2">
           {[0, 1, 2, 3, 4, 5].map((n) => (
-            <button key={n} onClick={() => grade(n)} className="border rounded px-2">
+            <button
+              key={n}
+              onClick={() => grade(n)}
+              className="border rounded px-2"
+            >
               {n}
             </button>
           ))}
