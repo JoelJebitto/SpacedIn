@@ -63,7 +63,7 @@ export default function DeckList({ userId, onChange }) {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="New Deck"
-          className="border border-gray-600 rounded p-2 flex-1 bg-gray-700 text-gray-100"
+          className="rounded p-2 flex-1 active:outline-none active:border-none focus:outline-none focus:border-none active:bg-gray-700 focus:bg-gray-700  active:text-gray-100 focus:text-gray-100 bg-gray-600/90 text-gray-200"
         />
         <button
           className="bg-green-600 text-white rounded px-3 disabled:opacity-50"
@@ -74,15 +74,16 @@ export default function DeckList({ userId, onChange }) {
       </form>
       <ul className="space-y-2">
         {decks.map((d) => (
-          <li key={d.id} className="border border-gray-600 rounded p-4 space-y-1 bg-gray-800 shadow">
-
+          <li
+            key={d.id}
+            className="border border-gray-700 rounded p-4 space-y-1bg-black/90 shadow-2xl"
+          >
             {editingId === d.id ? (
-              <div className="flex justify-between items-center gap-2">
+              <div className="flex justify-between pb-2 items-center gap-2">
                 <input
                   value={editTitle}
                   onChange={(e) => setEditTitle(e.target.value)}
-                  className="border border-gray-600 rounded p-2 flex-1 bg-gray-700 text-gray-100"
-
+                  className="border border-gray-600 rounded p-2 flex-1 bg-black/85 text-gray-100"
                 />
                 <button
                   onClick={() => save(d.id)}
