@@ -8,6 +8,7 @@ export default function Deck() {
   const { id } = useParams();
   const { user } = useAuth();
   const [stats, setStats] = useState(null);
+  const [deck, setDeck] = useState(null);
 
   const refreshStats = useCallback(() => {
     if (user?.id) {
@@ -19,6 +20,10 @@ export default function Deck() {
     refreshStats();
   }, [refreshStats]);
 
+  useEffect(() => {
+    api.getDeck(id).then(setDeck).catch(console.error);
+  }, [id]);
+
   console.log(stats);
 
   return (
@@ -26,6 +31,8 @@ export default function Deck() {
       <Link to="/dashboard" className="text-blue-600">
         Back
       </Link>
+
+      {deck && <h1 className="text-xl font-bold">{deck.title}</h1>}
 
       {stats && (
         <div className="space-y-1">
