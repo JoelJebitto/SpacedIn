@@ -32,6 +32,7 @@ export const api = {
       body: JSON.stringify(data),
     }),
   getDecks: (userId) => request(`/api/decks/user/${userId}`),
+  getDeck: (id) => request(`/api/decks/share/${id}`),
   createDeck: (userId, data) =>
     request(`/api/decks/${userId}`, {
       method: "POST",
