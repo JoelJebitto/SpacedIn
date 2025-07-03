@@ -10,9 +10,12 @@ export default function Router() {
   return (
     <BrowserRouter>
       <Routes>
+        {/* Public routes */}
+        <Route path="/" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+
+        {/* Protected routes with layout */}
         <Route element={<Layout />}>
-          <Route path="/" element={<Login />} />
-          <Route path="/register" element={<Register />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/decks/:id" element={<Deck />} />
           <Route path="/decks/:id/review" element={<Review />} />
