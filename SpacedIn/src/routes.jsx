@@ -5,14 +5,17 @@ import Dashboard from "./pages/Dashboard.jsx";
 import Deck from "./pages/Deck.jsx";
 import Review from "./pages/Review.jsx";
 import Layout from "./components/Layout.jsx";
+import Landing from "./pages/Landing.jsx";
 
 export default function Router() {
   return (
     <BrowserRouter>
       <Routes>
         {/* Public routes */}
-        <Route path="/" element={<Login />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+
+        <Route path="/" element={<Landing />} />
 
         {/* Protected routes with layout */}
         <Route element={<Layout />}>

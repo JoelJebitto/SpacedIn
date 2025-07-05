@@ -14,8 +14,8 @@ export default function useDeepSeekStream() {
   const parse = useCallback(() => {
     const text = liveRef.current;
     const start = text.indexOf("<think>");
-    const end = text.indexOf("\u003c/think\u003e");
-
+    const end = text.indexOf("</think>");
+    // </think>
     let reasoning = "";
     let answer = "";
 
@@ -24,7 +24,7 @@ export default function useDeepSeekStream() {
 
       // Remove any trailing partial closing tag tokens
       if (end === -1) {
-        const closing = "</think>";
+        const closing = " \u003c/think\u003e";
         for (let i = 1; i < closing.length; i++) {
           if (reasoning.endsWith(closing.slice(0, i))) {
             reasoning = reasoning.slice(0, -i);
@@ -42,10 +42,11 @@ export default function useDeepSeekStream() {
 
     setReasoningText(reasoning.trim());
     setAnswerText(answer.trim());
-
+    console.log(reasoning);
+    console.log(answer);
     return { reasoning, answer };
   }, []);
-
+  //
   const onStreamChunk = useCallback(
     (chunk) => {
       liveRef.current += chunk;
